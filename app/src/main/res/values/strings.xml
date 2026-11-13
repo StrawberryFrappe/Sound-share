@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sound Share</string>
+
+    <string name="tab_share">Share audio</string>
+    <string name="tab_listen">Listen</string>
+
+    <!-- Share tab -->
+    <string name="share_intro">Send whatever this device is playing to another phone on the same Wi‑Fi, so someone can listen with their own headphones.</string>
+    <string name="share_start">Start sharing</string>
+    <string name="share_stop">Stop sharing</string>
+    <string name="share_unsupported">Sharing needs Android 10 or newer. This device can still listen to another one.</string>
+    <string name="share_running_title">Sharing this device\'s audio</string>
+    <string name="share_waiting">Waiting for a listener. Open Sound Share on the other phone and choose Listen.</string>
+    <plurals name="share_listeners">
+        <item quantity="one">%d device listening</item>
+        <item quantity="other">%d devices listening</item>
+    </plurals>
+    <string name="share_device_name">This device: %s</string>
+    <string name="share_address">Address: %s</string>
+    <string name="share_no_network">Not connected to Wi‑Fi. Join the same network as the other phone.</string>
+    <string name="share_hint_volume">Sound keeps playing here too. Turn this device\'s volume down if only the other person should hear it.</string>
+    <string name="share_hint_apps">Some apps, such as Netflix, do not let their sound be captured. If the other phone stays silent, try the same video in a browser.</string>
+    <string name="share_permission_needed">Android asks for the microphone permission before an app may capture what the device is playing. Sound Share never listens to the microphone itself. Allow it to start sharing.</string>
+    <string name="error_capture">Could not capture this device\'s audio.</string>
+    <string name="error_port">Could not open the network connection. Another app may be using it.</string>
+
+    <!-- Listen tab -->
+    <string name="listen_intro">Play another device\'s sound through this phone\'s headphones. Both devices must be on the same Wi‑Fi or hotspot.</string>
+    <string name="listen_searching">Looking for devices that are sharing…</string>
+    <string name="listen_found">Sharing now</string>
+    <string name="listen_manual_title">Not listed?</string>
+    <string name="listen_manual_hint">Type the address shown on the sharing device.</string>
+    <string name="listen_address_label">Address</string>
+    <string name="listen_connect">Connect</string>
+    <string name="listen_stop">Stop listening</string>
+    <string name="link_connecting">Connecting to %s…</string>
+    <string name="link_playing">Listening to %s</string>
+    <string name="link_no_signal">Lost the connection to %s. Trying again…</string>
+    <string name="link_sender_stopped">%s stopped sharing. Waiting for it to start again…</string>
+    <string name="delay_title">Delay: %d ms</string>
+    <string name="delay_hint">Lower keeps the sound closer to the picture. Raise it if the sound cuts out, or if you hear things before they happen on screen.</string>
+    <string name="stats_buffered">Buffered: %d ms</string>
+    <plurals name="stats_dropouts">
+        <item quantity="one">%d dropout</item>
+        <item quantity="other">%d dropouts</item>
+    </plurals>
+    <string name="error_address">Could not find a device at that address.</string>
+    <string name="error_playback">Could not play audio on this phone.</string>
+
+    <!-- Notifications -->
+    <string name="channel_name">Sharing and listening</string>
+    <string name="notification_sharing">Sharing this device\'s audio</string>
+    <string name="notification_listening">Listening to %s</string>
+    <string name="notification_stop">Stop</string>
+</resources>
