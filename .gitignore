@@ -6,3 +6,8 @@ local.properties
 .kotlin/
 captures/
 .DS_Store
+
+# Release signing key: keep it safe, never commit it
+keystore.properties
+*.keystore
+*.jks

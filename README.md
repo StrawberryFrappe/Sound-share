@@ -51,11 +51,26 @@ Things to know while watching:
 ## Building
 
 ```sh
-./gradlew assembleDebug        # app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleRelease      # app/build/outputs/apk/release/app-release.apk
 ./gradlew testDebugUnitTest    # protocol, buffer and network tests
 ```
 
 Needs JDK 17 or newer and the Android SDK (platform 37).
+
+Release builds are optimized and shrunk with R8. They are signed with the key
+named in `keystore.properties` at the project root:
+
+```properties
+storeFile=sound-share-release.jks
+storePassword=...
+keyAlias=soundshare
+keyPassword=...
+```
+
+Neither file is in git. Keep both safe: Android only installs an update over
+an existing install when it is signed with the same key. Without
+`keystore.properties`, release builds are signed with the local debug key
+instead, which is fine for trying things out.
 
 ## How it works
 
