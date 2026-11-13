@@ -181,7 +181,8 @@ private fun Listening(receiver: ShareState.Receiver, onDelayChosen: (Int) -> Uni
                     val dropouts = receiver.dropouts.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
                     Hint(
                         stringResource(R.string.stats_buffered, receiver.bufferedMs) + "  ·  " +
-                            pluralStringResource(R.plurals.stats_dropouts, dropouts, dropouts),
+                            pluralStringResource(R.plurals.stats_dropouts, dropouts, dropouts) + "  ·  " +
+                            stringResource(R.string.stats_lost, "%.1f".format(receiver.lostPercent)),
                     )
                 }
             }

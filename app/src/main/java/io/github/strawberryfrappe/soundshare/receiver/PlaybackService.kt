@@ -23,6 +23,7 @@ import io.github.strawberryfrappe.soundshare.R
 import io.github.strawberryfrappe.soundshare.ShareState
 import io.github.strawberryfrappe.soundshare.StreamingLocks
 import io.github.strawberryfrappe.soundshare.core.JitterBuffer
+import io.github.strawberryfrappe.soundshare.core.LossConcealer
 import io.github.strawberryfrappe.soundshare.core.Protocol
 import io.github.strawberryfrappe.soundshare.core.StreamClient
 import io.github.strawberryfrappe.soundshare.streamingNotification
@@ -40,6 +41,7 @@ import kotlin.concurrent.thread
 class PlaybackService : Service(), StreamClient.Listener {
     private val mainHandler = Handler(Looper.getMainLooper())
     private val jitter = JitterBuffer(ShareState.DEFAULT_DELAY_MS / Protocol.PACKET_MS)
+    private val concealer = LossConcealer()
     private var client: StreamClient? = null
     private var playThread: Thread? = null
     private var locks: StreamingLocks? = null
@@ -139,6 +141,7 @@ class PlaybackService : Service(), StreamClient.Listener {
                 }
                 // write() waits until the phone has room for more sound, which paces this loop.
                 val length = jitter.pull(out)
+                concealer.process(out, length, jitter.lastPullHadAudio)
                 if (track.write(out, 0, length) < 0) {
                     if (running) error = R.string.error_playback
                     return
@@ -208,6 +211,7 @@ class PlaybackService : Service(), StreamClient.Listener {
             link = link,
             bufferedMs = stats.bufferedPackets * Protocol.PACKET_MS,
             dropouts = stats.underruns,
+            lostPercent = if (stats.played == 0L) 0f else stats.lost * 100f / stats.played,
         )
     }
 

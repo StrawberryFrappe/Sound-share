@@ -45,6 +45,7 @@ class StreamServer(
         val s = DatagramSocket(null)
         s.reuseAddress = true
         s.broadcast = true
+        s.sendBufferSize = SEND_BUFFER_BYTES
         s.bind(InetSocketAddress(port))
         socket = s
         running = true
@@ -133,6 +134,7 @@ class StreamServer(
 
     private companion object {
         const val PRUNE_EVERY_PACKETS = 200
+        const val SEND_BUFFER_BYTES = 256 * 1024
 
         /** The broadcast address of every network this device is on, hotspot included. */
         fun broadcastAddresses(): List<InetAddress> = try {

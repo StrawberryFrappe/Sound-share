@@ -33,6 +33,11 @@ Things to know while watching:
 - **Tablet volume.** The tablet keeps playing its own sound. Turn its volume
   down if only the phone should be heard; the shared sound stays at full level.
 - **Phone volume** is the phone's normal media volume.
+- **Choppy sound?** The phone shows how much audio arrived too late ("lost")
+  and how often playback ran dry ("dropouts"). Raising the delay helps with
+  both. Crowded 2.4 GHz Wi‑Fi (many networks nearby) is the usual cause, and
+  so are Bluetooth headphones on the tablet, which share its radio with
+  2.4 GHz Wi‑Fi. A 5 GHz network avoids both, if both devices support it.
 - Listening stops by itself when the headphones are unplugged.
 - Several phones can listen to one tablet at the same time.
 

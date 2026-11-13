@@ -41,6 +41,7 @@
     <string name="delay_title">Delay: %d ms</string>
     <string name="delay_hint">Lower keeps the sound closer to the picture. Raise it if the sound cuts out, or if you hear things before they happen on screen.</string>
     <string name="stats_buffered">Buffered: %d ms</string>
+    <string name="stats_lost">%s%% lost</string>
     <plurals name="stats_dropouts">
         <item quantity="one">%d dropout</item>
         <item quantity="other">%d dropouts</item>

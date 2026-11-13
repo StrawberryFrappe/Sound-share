@@ -22,7 +22,8 @@ class JitterBuffer(
     private val frameBytes: Int = Protocol.BYTES_PER_FRAME,
     private val capacity: Int = 512,
 ) {
-    class Stats(val bufferedPackets: Int, val lost: Long, val late: Long, val underruns: Long)
+    /** [lost] counts packets that had not arrived when their turn came, out of [played]. */
+    class Stats(val bufferedPackets: Int, val played: Long, val lost: Long, val late: Long, val underruns: Long)
 
     private val data = ByteArray(capacity * packetBytes)
     private val slotSeq = LongArray(capacity) { NO_PACKET }
@@ -34,9 +35,14 @@ class JitterBuffer(
     private var highestSeq = -1L
     private var averageDepth = 0.0
 
+    private var played = 0L
     private var lost = 0L
     private var late = 0L
     private var underruns = 0L
+
+    /** Whether the last [pull] produced real sound, rather than silence in place of missing audio. */
+    var lastPullHadAudio: Boolean = false
+        private set
 
     /** The largest number of bytes [pull] can write. */
     val maxPullBytes: Int get() = packetBytes + frameBytes
@@ -108,12 +114,14 @@ class JitterBuffer(
         averageDepth += (depth - averageDepth) * SMOOTHING
 
         val slot = (nextSeq % capacity).toInt()
-        if (slotSeq[slot] == nextSeq) {
+        lastPullHadAudio = slotSeq[slot] == nextSeq
+        if (lastPullHadAudio) {
             System.arraycopy(data, slot * packetBytes, out, 0, packetBytes)
         } else {
             out.fill(0, 0, packetBytes)
             lost++
         }
+        played++
         nextSeq++
 
         return when {
@@ -139,10 +147,11 @@ class JitterBuffer(
     @Synchronized
     fun stats(): Stats {
         val depth = if (started) (highestSeq - nextSeq + 1).toInt().coerceAtLeast(0) else 0
-        return Stats(depth, lost, late, underruns)
+        return Stats(depth, played, lost, late, underruns)
     }
 
     private fun silence(out: ByteArray): Int {
+        lastPullHadAudio = false
         out.fill(0, 0, packetBytes)
         return packetBytes
     }

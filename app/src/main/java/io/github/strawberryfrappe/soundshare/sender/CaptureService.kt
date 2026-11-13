@@ -110,7 +110,8 @@ class CaptureService : Service() {
             )
             AudioRecord.Builder()
                 .setAudioFormat(format)
-                .setBufferSizeInBytes(maxOf(minBuffer, Protocol.PACKET_PCM_BYTES * 4))
+                // Room for a quarter second, so no sound is lost while a send waits on busy Wi-Fi.
+                .setBufferSizeInBytes(maxOf(minBuffer, Protocol.SAMPLE_RATE / 4 * Protocol.BYTES_PER_FRAME))
                 .setAudioPlaybackCaptureConfig(captureConfig)
                 .build()
         } catch (_: SecurityException) {
