@@ -36,9 +36,11 @@ class StreamClient(
     fun start() {
         val s = DatagramSocket()
         s.soTimeout = RECEIVE_TIMEOUT_MS
+        // Room for about a second of audio, so a burst after a Wi-Fi stall is not thrown away.
+        s.receiveBufferSize = RECEIVE_BUFFER_BYTES
         socket = s
         running = true
-        thread(name = "soundshare-receive", isDaemon = true) { receiveLoop(s) }
+        thread(name = "soundshare-receive", isDaemon = true, priority = Thread.MAX_PRIORITY) { receiveLoop(s) }
     }
 
     fun stop() {
@@ -99,5 +101,6 @@ class StreamClient(
 
     private companion object {
         const val RECEIVE_TIMEOUT_MS = 250
+        const val RECEIVE_BUFFER_BYTES = 256 * 1024
     }
 }
