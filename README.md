@@ -45,9 +45,10 @@ Things to know while watching:
 
 - The sharing device needs Android 10 or newer. The listening device needs
   Android 6 or newer.
-- Apps decide whether their sound may be captured. Some streaming apps
-  (Netflix among them) forbid it, and then the phone stays silent. Playing the
-  same service in a browser often works.
+- Apps decide whether their sound may be captured. Netflix, and likely other
+  paid streaming apps with copy protection, forbid it; Android then hands Sound
+  Share silence, and the phone stays silent. Sound Share does not try to get
+  around this.
 - Both devices must be able to reach each other. Guest and public Wi‑Fi often
   block that.
 - Wi‑Fi only. An Android phone cannot act as a Bluetooth headset for another

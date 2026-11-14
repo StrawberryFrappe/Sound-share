@@ -20,7 +20,7 @@
     <string name="share_address">Address: %s</string>
     <string name="share_no_network">Not connected to Wi‑Fi. Join the same network as the other phone.</string>
     <string name="share_hint_volume">Sound keeps playing here too. Turn this device\'s volume down if only the other person should hear it.</string>
-    <string name="share_hint_apps">Some apps, such as Netflix, do not let their sound be captured. If the other phone stays silent, try the same video in a browser.</string>
+    <string name="share_hint_apps">Some apps, such as Netflix, do not allow their sound to be shared. With those, the other phone stays silent.</string>
     <string name="share_permission_needed">Android asks for the microphone permission before an app may capture what the device is playing. Sound Share never listens to the microphone itself. Allow it to start sharing.</string>
     <string name="error_capture">Could not capture this device\'s audio.</string>
     <string name="error_port">Could not open the network connection. Another app may be using it.</string>
