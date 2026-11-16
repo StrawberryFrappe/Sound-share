@@ -21,7 +21,7 @@ table.
 
 ## Proposed / Accepted Stack
 
-The existing stack, unchanged, pending owner confirmation (ADR 0005, ASM-001).
+The existing stack, accepted by the owner (ADR 0005).
 Decided addition: Google Play Billing Library for the hosting unlock
 (ADR 0008, BL-016). Candidate additions, each needing its own decision: Opus
 compression (BL-013), Wi-Fi Direct or local-only hotspot (ADR 0007, BL-003).

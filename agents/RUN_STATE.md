@@ -5,37 +5,34 @@ a matching entry under `agents/record/`.
 
 ## Current Phase
 
-Harness mounted on 2026-11-16, **awaiting the owner's acceptance**.
+Implementation. The owner accepted the harness on 2026-11-16 (EV-007) and asked
+to be asked again later rather than now.
 
 ## Status
 
-- App: 0.3.0 (pairing code, encrypted stream, Spanish) is built, pushed and
-  handed to the owner. It passed unit tests, lint and a release smoke test in an
-  emulator (EV-001, EV-002). **Not yet checked on real devices** (BL-002).
-- Store: no Google Play developer account yet (BL-005). Pricing changed to
-  free listening plus a one-time hosting unlock (ADR 0008).
-- Harness: mounted; independent mount review in `agents/reviews/20261116/`
-  approved with fixes, and the fixes are applied; doctor passes with no
-  blockers (`agents/validation/DOCTOR.md`).
-- Implementation is blocked until the owner accepts the mounted harness.
+- App: 0.3.0 handed to the owner; real-device check pending (BL-002).
+- In progress (agent, no owner input needed):
+  - BL-015 string parity check, as a unit test.
+  - BL-014 continuous integration for tests and lint.
+  - BL-012 warning when the playing app blocks capture.
+  - BL-003 hotspot research spike, desk-research part (Android documentation);
+    the device part needs the owner's tablet model and devices.
+- Waiting on the owner: trial length (blocks BL-017), tablet model (BL-003),
+  Play developer account (BL-005), real-device report on 0.3.0 (BL-002).
+- BL-016 (hosting unlock) waits for BL-017's trial decision and for a Play test
+  track to test purchases.
 
 ## Next Action
 
-Owner: accept or correct the harness, especially the assumptions in
-`agents/intake/ASSUMPTIONS.md`, the proposed ADRs, the unlock design in
-ADR 0008, the trial length, and the commit identity (BL-019). Meanwhile, install 0.3.0
-on the tablet and phone and report pairing, steadiness ("% lost", dropouts) and
-lip sync (BL-002).
-
-After acceptance: the hotspot research spike (BL-003) and the owner's account
-setup (BL-005) can start in parallel.
+Finish and review the in-progress batch, hand the owner a 0.3.1 build to try
+when they have time, then write the hotspot research up as a proposed ADR.
 
 ## Blockers
 
-- Owner has not accepted the mounted harness.
-- Store work is blocked on the developer account (BL-005).
+- Store work: no Play developer account (BL-005).
+- BL-017 trial: length not decided.
 
 ## Last Verified State
 
-2026-11-15: 0.3.0 release build — 34 unit tests pass, lint has no errors,
+2026-11-15: 0.3.0 release build: 34 unit tests pass, lint has no errors, the
 release APK pairs and plays on an Android 11 emulator via a typed code.

@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed on 2026-11-16; accepted when the owner accepts the mounted harness.
+Accepted by the owner on 2026-11-16.
 
 ## Context
 
@@ -23,13 +23,12 @@ added by the agent platform's default. The owner chose the kit's default.
 ## Consequences
 
 - Agents must drop platform-added trailers and footers.
-- **Known conflict (author identity):** every commit so far, including those
-  after the mount, is authored as `Claude <noreply@anthropic.com>`, the git
-  identity configured in the cloud agent environment. The workflow requires the
-  owner's own identity and also forbids agents from changing the configured
-  identity, so this cannot be fixed by an agent alone. The owner either sets
-  their own identity for agent work or accepts the conflict until BL-019 is
-  done. The hook checks messages only, not the author.
+- **Author identity:** commits up to `57ad5b1` are authored as the agent
+  environment's identity. On 2026-11-16 the owner asked for their GitHub
+  account, StrawberryFrappe, to be the author; later commits use that name with
+  the account's GitHub noreply address, which links them to the account
+  without publishing a personal email. Each agent environment sets this in its
+  local git config. The hook checks messages only, not the author.
 - **Known conflict (branch):** the current branch, `claude/android-audio-streaming-xmkci1`,
   has a `claude/` prefix, which the rule forbids. The cloud agent session that
   develops this project is required to push to that branch. It stays for now;

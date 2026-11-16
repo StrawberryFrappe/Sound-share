@@ -5,7 +5,7 @@ formal requirement IDs; it traces decisions and outcomes.
 
 | Trace ID | Source / Decision | Backlog Item | Verification | Evidence |
 |---|---|---|---|---|
-| TR-001 | Kernel mount requested (SRC-001) | BL-001 | Harness mount review; doctor run | `agents/reviews/20261116/harness-mount-review.md`, `agents/validation/DOCTOR.md` |
+| TR-001 | Kernel mount requested (SRC-001) | (done) | Harness mount review; doctor run; owner acceptance | `agents/reviews/20261116/harness-mount-review.md`, `agents/validation/DOCTOR.md`, EV-007 |
 | TR-002 | Share audio tablet to phone (Project Brief) | BL-002 | GATE-DEVICE owner check | `agents/validation/EVIDENCE_INDEX.md` |
 | TR-003 | Only paired devices can listen (ADR 0006) | (done in 0.3.0) | `StreamLoopbackTest`, `ProtocolTest`, `PairingTest` (GATE-TEST) | EV-001 in `agents/validation/EVIDENCE_INDEX.md` |
 | TR-004 | Free listening, 500 CLP hosting unlock that works offline (ADR 0008, superseding ADR 0004) | BL-005, BL-007, BL-016, BL-017, BL-018 | Unlock tests on a Play test track, including offline and reinstall | `agents/validation/EVIDENCE_INDEX.md` |

@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed on 2026-11-16; the scope is decided, the technical approach is not.
+Accepted by the owner on 2026-11-16. The scope is decided; the technical approach is not.
 
 ## Context
 

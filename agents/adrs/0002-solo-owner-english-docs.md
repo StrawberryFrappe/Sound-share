@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed on 2026-11-16; accepted when the owner accepts the mounted harness.
+Accepted by the owner on 2026-11-16.
 
 ## Context
 

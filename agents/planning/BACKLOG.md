@@ -5,7 +5,6 @@ in `agents/RUN_STATE.md` only. No external board is used.
 
 | ID | Area | Item | Why / Source | Done Evidence |
 |---|---|---|---|---|
-| BL-001 | Harness | Complete harness mounting | Owner request, 2026-11-16 | Owner accepts the mount review in `agents/reviews/20261116/` |
 | BL-002 | Verify | Real-device check of 0.3.0 on the owner's tablet and phone: QR pairing, sound steadiness ("% lost" and dropouts), lip sync at the default delay | GATE-DEVICE; ASM-007, ASM-008 | Owner's report recorded in `agents/validation/EVIDENCE_INDEX.md` |
 | BL-003 | Feature | Research spike: private network pairing (local-only hotspot vs Wi-Fi Direct), including whether the tablet keeps its own Wi-Fi | ADR 0007 | Follow-up ADR with the chosen approach, and test results from the owner's devices |
 | BL-004 | Design | Decide the visual direction (polish the current Material look, or a distinct brand), then a polish pass: icon, spacing, empty and error states, store screenshots | Owner goal "stylistic changes"; direction open | Owner approves real-device screenshots; GATE-PQ |
@@ -22,7 +21,6 @@ in `agents/RUN_STATE.md` only. No external board is used.
 | BL-016 | Feature | Hosting unlock: Google Play Billing for a one-time 500 CLP product; an "unlocked" record trusted offline; re-check, restore and refund handling when online; a purchase screen in English and Spanish | ADR 0008 | Unit tests for the unlock logic; on a test track with a license tester: buy, go offline, restart, still unlocked; reinstall restores; refund removes |
 | BL-017 | Feature | Free hosting trial (length per the open question in `agents/intake/QUESTIONS_SUMMARY.md`), counted on the device | ADR 0008 | Unit tests; owner tries the trial running out on a real device |
 | BL-018 | Store | Update `PRIVACY.md` and the Data safety form for in-app purchases: Google Play handles payment, the app keeps only an "unlocked" flag and the trial time on the device | ADR 0008; SRC-005 | Updated policy published; Data safety form accepted |
-| BL-019 | Repo | Commits authored under the owner's own git identity instead of the agent environment's (`Claude <noreply@anthropic.com>`) | ADR 0003 known conflict; mount review finding 1 | New commits show the owner as author |
 | BL-015 | Quality | A check that every English app string has a Spanish translation and the reverse | GATE-L10N | Check fails when a string is missing, passes now |
 
 ## Rules

@@ -10,7 +10,7 @@ real devices, secure pairing, a polished look, and a private-network option.
 
 | Milestone | Outcome | Evidence |
 |---|---|---|
-| M1 Harness | The harness is accepted and governs further work | BL-001 |
+| M1 Harness | The harness is accepted and governs further work | EV-007 |
 | M2 Verified core | 0.3.x pairs and plays steadily on the owner's tablet and phone | BL-002 in `agents/validation/EVIDENCE_INDEX.md` |
 | M3 Private network | Pairing works without a shared Wi-Fi network, on the owner's devices | BL-003 follow-up ADR and owner test |
 | M3b Hosting unlock | Free listening; trial and one-time unlock for hosting that keep working offline | BL-016, BL-017 |

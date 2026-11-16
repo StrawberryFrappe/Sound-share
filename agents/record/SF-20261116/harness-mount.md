@@ -22,3 +22,9 @@
   is the agent environment's), 7 P2, 8 P3. All fixed except what needs the
   owner: identity (BL-019) and confirming ADR 0008's proposed unlock design.
   Hook now also rejects `Claude-Session:` trailers. Doctor: 0 blockers.
+- Owner accepted the harness. Commits are now authored as StrawberryFrappe with
+  the account's GitHub noreply address (ADR 0003). Owner confirmed the unlock
+  design including the rooted-device risk. Trial length and tablet model left
+  for later; the owner is busy and asked to be asked again.
+- Next batch picked from the backlog without owner input: BL-015, BL-014,
+  BL-012, and the desk research for BL-003.

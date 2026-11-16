@@ -2,8 +2,7 @@
 
 ## Status
 
-Implemented in 0.3.0 (commit `a9cefe7`) before the harness existed; recorded
-here and accepted when the owner accepts the mounted harness.
+Implemented in 0.3.0 (commit `a9cefe7`) before the harness existed. Accepted by the owner on 2026-11-16.
 
 ## Context
 

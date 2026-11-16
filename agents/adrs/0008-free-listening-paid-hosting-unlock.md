@@ -2,8 +2,7 @@
 
 ## Status
 
-Proposed on 2026-11-16; accepted when the owner accepts the mounted harness.
-Supersedes ADR 0004.
+Accepted by the owner on 2026-11-16. Supersedes ADR 0004.
 
 ## Context
 
@@ -27,10 +26,11 @@ Decided by the owner on 2026-11-16:
 - **Hosting keeps working offline after purchase.** This was the owner's
   condition for choosing the unlock over a separate paid app.
 
-## Proposed Design
+## Design
 
-Proposed by the agent to meet the owner's condition; the owner confirms or
-corrects it when accepting the harness.
+Proposed by the agent to meet the owner's condition and confirmed by the owner
+on 2026-11-16, including the rooted-device risk: "at that point they have the
+technical expertise to make the app themselves".
 
 - A non-consumable product bought through Google Play Billing.
 - The app records "hosting unlocked" on the device when Google Play confirms
@@ -39,7 +39,7 @@ corrects it when accepting the harness.
   after a reinstall and removes it after a refund. Streaming itself never needs
   the internet.
 - Purchase checks happen on the device only; there is no server. A rooted
-  device could fake the unlock (ASM-010).
+  device could fake the unlock; the owner accepted that.
 
 ## Consequences
 
