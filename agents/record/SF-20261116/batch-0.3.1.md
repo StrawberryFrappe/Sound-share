@@ -16,3 +16,6 @@
   could not be triggered there (no media apps on the image); it needs the
   owner's tablet with a capture-blocking app, as BL-012 says.
 - Version 0.3.1 (code 4), commit `c7c1e7f`.
+- CI's first two runs passed on GitHub (runs 43785310898, 43785409498), so the
+  SDK install step and the debug-key fallback for release builds work on a
+  fresh runner. BL-014 removed from the backlog (EV-010).

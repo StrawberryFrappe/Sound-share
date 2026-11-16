@@ -15,7 +15,8 @@ to be asked again later rather than now.
   app blocks sharing (BL-012) and the string parity test (BL-015, done).
 - Real-device checks pending, whenever the owner has time: pairing and sound
   on 0.3.x (BL-002); the blocked-app warning with Netflix (BL-012).
-- CI (BL-014): workflow pushed; its first run decides whether BL-014 is done.
+- CI (BL-014, done): GitHub Actions runs unit tests, lint and a release build on
+  every push; the first two runs passed (EV-010).
 - Private network (BL-003): desk research done; approach proposed in ADR 0009,
   waiting for the owner's tablet model and a decision on the location
   permission for Android 10 to 12.
@@ -26,8 +27,7 @@ to be asked again later rather than now.
 
 Owner, when free: try 0.3.1 on both devices; answer the open P1 questions in
 `agents/intake/QUESTIONS_SUMMARY.md` (trial length, tablet model, location
-permission). Agent: confirm the first CI run; then continue with work that
-needs no owner input.
+permission). Agent: continue with work that needs no owner input.
 
 ## Blockers
 
