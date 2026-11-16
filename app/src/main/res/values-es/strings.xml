@@ -19,6 +19,8 @@
     <string name="share_hint_volume">El sonido sigue saliendo aquí también. Baja el volumen de este dispositivo si solo debe escuchar la otra persona.</string>
     <string name="share_hint_apps">Algunas apps, como Netflix, no permiten compartir su sonido. Con esas, el otro teléfono queda en silencio.</string>
     <string name="share_permission_needed">Android pide el permiso de micrófono antes de que una app pueda capturar lo que suena en el dispositivo. Sound Share nunca escucha el micrófono. Permítelo para empezar a compartir.</string>
+    <string name="share_blocked_title">No está llegando sonido</string>
+    <string name="share_blocked_body">Algo se está reproduciendo, pero solo se está compartiendo silencio. Puede que la app que lo reproduce no permita compartir su sonido; Netflix y otras apps de streaming lo hacen. Prueba con otra app o con un video guardado en este dispositivo.</string>
     <string name="share_pairing_title">Teléfonos vinculados</string>
     <string name="share_pairing_body">Solo pueden escuchar los teléfonos que escanearon el código de este dispositivo, y después pueden volver sin escanearlo otra vez.</string>
     <string name="share_new_code">Crear un código nuevo</string>

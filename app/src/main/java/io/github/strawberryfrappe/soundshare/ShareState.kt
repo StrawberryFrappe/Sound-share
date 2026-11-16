@@ -9,6 +9,8 @@ object ShareState {
         val running: Boolean = false,
         /** Names of the devices listening right now. */
         val listeners: List<String> = emptyList(),
+        /** Only silence is coming in while something plays: that app likely blocks capture. */
+        val captureBlocked: Boolean = false,
         @param:StringRes val error: Int? = null,
     )
 

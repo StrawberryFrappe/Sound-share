@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.media.AudioAttributes
 import android.media.AudioFormat
+import android.media.AudioManager
 import android.media.AudioPlaybackCaptureConfiguration
 import android.media.AudioRecord
 import android.media.projection.MediaProjection
@@ -28,6 +29,7 @@ import io.github.strawberryfrappe.soundshare.ShareState
 import io.github.strawberryfrappe.soundshare.StreamingLocks
 import io.github.strawberryfrappe.soundshare.deviceName
 import io.github.strawberryfrappe.soundshare.core.Protocol
+import io.github.strawberryfrappe.soundshare.core.SilenceWatch
 import io.github.strawberryfrappe.soundshare.core.StreamServer
 import io.github.strawberryfrappe.soundshare.streamingNotification
 import java.io.IOException
@@ -139,6 +141,9 @@ class CaptureService : Service() {
             record.startRecording()
             ShareState.sender.value = ShareState.Sender(running = true)
             val pcm = ByteArray(Protocol.PACKET_PCM_BYTES)
+            val audioManager = getSystemService(AudioManager::class.java)
+            val silenceWatch = SilenceWatch()
+            var mediaPlaying = audioManager.isMusicActive
             var packets = 0
             while (running) {
                 var filled = 0
@@ -151,11 +156,16 @@ class CaptureService : Service() {
                     filled += read
                 }
                 server.sendAudio(pcm)
-                if (++packets % PACKETS_PER_STATUS == 0) {
-                    val listeners = server.listenerNames
-                    if (ShareState.sender.value.listeners != listeners) {
-                        ShareState.sender.value = ShareState.Sender(running = true, listeners = listeners)
-                    }
+                val blockedChanged = silenceWatch.onPacket(pcm, pcm.size, mediaPlaying, System.nanoTime())
+                if (++packets % PACKETS_PER_STATUS == 0 || blockedChanged) {
+                    mediaPlaying = audioManager.isMusicActive
+                    val status = ShareState.Sender(
+                        running = true,
+                        listeners = server.listenerNames,
+                        captureBlocked = silenceWatch.blocked,
+                    )
+                    // Once stopping, leave the final state to onDestroy.
+                    if (running && ShareState.sender.value != status) ShareState.sender.value = status
                 }
             }
         } catch (_: IOException) {
