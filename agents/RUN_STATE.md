@@ -10,29 +10,33 @@ to be asked again later rather than now.
 
 ## Status
 
-- App: 0.3.0 handed to the owner; real-device check pending (BL-002).
-- In progress (agent, no owner input needed):
-  - BL-015 string parity check, as a unit test.
-  - BL-014 continuous integration for tests and lint.
-  - BL-012 warning when the playing app blocks capture.
-  - BL-003 hotspot research spike, desk-research part (Android documentation);
-    the device part needs the owner's tablet model and devices.
-- Waiting on the owner: trial length (blocks BL-017), tablet model (BL-003),
-  Play developer account (BL-005), real-device report on 0.3.0 (BL-002).
-- BL-016 (hosting unlock) waits for BL-017's trial decision and for a Play test
-  track to test purchases.
+- App: 0.3.1 built, reviewed and smoke-tested (EV-008, EV-009), pushed as
+  commit `c7c1e7f`, and handed to the owner. Adds the warning when the playing
+  app blocks sharing (BL-012) and the string parity test (BL-015, done).
+- Real-device checks pending, whenever the owner has time: pairing and sound
+  on 0.3.x (BL-002); the blocked-app warning with Netflix (BL-012).
+- CI (BL-014): workflow pushed; its first run decides whether BL-014 is done.
+- Private network (BL-003): desk research done; approach proposed in ADR 0009,
+  waiting for the owner's tablet model and a decision on the location
+  permission for Android 10 to 12.
+- Hosting unlock (BL-016) and trial (BL-017): waiting for the trial length and
+  for a Play test track.
 
 ## Next Action
 
-Finish and review the in-progress batch, hand the owner a 0.3.1 build to try
-when they have time, then write the hotspot research up as a proposed ADR.
+Owner, when free: try 0.3.1 on both devices; answer the open P1 questions in
+`agents/intake/QUESTIONS_SUMMARY.md` (trial length, tablet model, location
+permission). Agent: confirm the first CI run; then continue with work that
+needs no owner input.
 
 ## Blockers
 
 - Store work: no Play developer account (BL-005).
 - BL-017 trial: length not decided.
+- BL-003 private network: tablet model and permission decision.
 
 ## Last Verified State
 
-2026-11-15: 0.3.0 release build: 34 unit tests pass, lint has no errors, the
-release APK pairs and plays on an Android 11 emulator via a typed code.
+2026-11-16: 0.3.1 release build: 43 unit tests pass, lint has no errors, the
+release APK updates over 0.3.0 on an Android 11 emulator, keeps its pairing,
+shares, and a remembered listener reconnects and plays.

@@ -10,7 +10,7 @@
 | GATE-TEST Tests | Any code change | `./gradlew testDebugUnitTest lintRelease assembleRelease` passes, with no lint errors | Command output, recorded in `agents/validation/EVIDENCE_INDEX.md` for releases |
 | GATE-RELEASE Release Smoke | Changes to startup, libraries, shrinking, permissions or services | The **release** APK installs and runs the changed flow in an emulator without crashing | Emulator run noted in `agents/validation/EVIDENCE_INDEX.md` |
 | GATE-DEVICE Real Device | Anything the user hears or sees, before it is called done | The owner runs the build on real devices and reports the result | Owner's report in `agents/validation/EVIDENCE_INDEX.md` |
-| GATE-L10N App Strings | Any change to app text | Every string in `app/src/main/res/values/strings.xml` has a Spanish version in `app/src/main/res/values-es/strings.xml`, and the reverse | Parity check output (BL-015 automates it) |
+| GATE-L10N App Strings | Any change to app text | Every string in `app/src/main/res/values/strings.xml` has a Spanish version in `app/src/main/res/values-es/strings.xml`, and the reverse, with the same placeholders | `StringResourcesTest`, part of `./gradlew testDebugUnitTest` |
 | GATE-DEPLOY Deployment | Store releases | The bundle is accepted by the Play Console on the intended track, or the blocker is recorded | Play Console state; until an account exists, the blocker in `agents/RUN_STATE.md` |
 | GATE-PQ Portfolio Quality | User-facing changes and store assets | Visible output is credible, polished and demonstrable | Real-device screenshots approved by the owner |
 

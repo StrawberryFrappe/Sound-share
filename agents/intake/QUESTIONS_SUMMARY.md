@@ -29,7 +29,8 @@ proceeds on the defaults where they are safe, and waits where noted.
 
 | Priority | Question | Why It Matters | Default If Deferred |
 |---|---|---|---|
-| P1 | Which tablet model is the sharing device? | Decides whether the hotspot can run while the tablet stays on its own Wi-Fi (ADR 0007) | Research both the hotspot and Wi-Fi Direct approaches |
+| P1 | Which tablet model and Android version is the sharing device? | Decides whether the private network can run while the tablet stays on its own Wi-Fi (ADR 0009) | Desk research done; the probe build waits for this |
+| P1 | Is a location permission prompt acceptable on Android 10 to 12 sharing devices, for the private network only? | Wi-Fi Direct needs it there; unexpected in an audio app (ADR 0009) | Do not build the private network flow until answered |
 | P1 | Development so far is on `claude/android-audio-streaming-xmkci1`, which the no-attribution rule forbids. Move to `main`? | Rule conflict, and the store build should come from a clean branch | Keep it for now; move to `main` before the first store upload (BL-010) |
 | P2 | What does the stakeholder (the listener) need to see before launch: a demo, a test build? | Decides when their feedback enters | Give them the closed-test build (BL-006) |
 | P2 | Model and usage budget for subagents | The workflow assigns model tiers; cost is the owner's | Follow the workflow's tier table; keep fan-out small |

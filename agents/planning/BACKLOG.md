@@ -21,7 +21,6 @@ in `agents/RUN_STATE.md` only. No external board is used.
 | BL-016 | Feature | Hosting unlock: Google Play Billing for a one-time 500 CLP product; an "unlocked" record trusted offline; re-check, restore and refund handling when online; a purchase screen in English and Spanish | ADR 0008 | Unit tests for the unlock logic; on a test track with a license tester: buy, go offline, restart, still unlocked; reinstall restores; refund removes |
 | BL-017 | Feature | Free hosting trial (length per the open question in `agents/intake/QUESTIONS_SUMMARY.md`), counted on the device | ADR 0008 | Unit tests; owner tries the trial running out on a real device |
 | BL-018 | Store | Update `PRIVACY.md` and the Data safety form for in-app purchases: Google Play handles payment, the app keeps only an "unlocked" flag and the trial time on the device | ADR 0008; SRC-005 | Updated policy published; Data safety form accepted |
-| BL-015 | Quality | A check that every English app string has a Spanish translation and the reverse | GATE-L10N | Check fails when a string is missing, passes now |
 
 ## Rules
 
