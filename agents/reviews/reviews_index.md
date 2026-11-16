@@ -5,7 +5,7 @@ folders.
 
 | Date | Review | Verdict | Why It Matters |
 |---|---|---|---|
-| TBD | TBD | TBD | TBD |
+| 2026-11-16 | `agents/reviews/20261116/harness-mount-review.md` | Approve with fixes; fixes applied, two items need the owner | Gate for accepting the harness (GATE-HM) |
 
 ## Review Types
 

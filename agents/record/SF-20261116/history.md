@@ -9,7 +9,7 @@ survives outside one chat. Dates are the session's.
   jitter buffer with clock-drift correction, beacon discovery. 0.1.0 debug APK,
   then an R8-shrunk signed release (11.8 MB to 1.3 MB). The release key was
   generated in the session and sent to the owner; it is not in git.
-- **2026-11-13.** First install failed on the owner's LG K51S: an earlier debug
+- **2026-11-13.** First install failed on the owner's phone: an earlier debug
   build signed with a different key was still installed. Installing over it
   worked on an Android 11 emulator, so the cause was the signature, not the APK.
 - **2026-11-13.** Owner: installation fine, connection "kinda iffy sometimes",

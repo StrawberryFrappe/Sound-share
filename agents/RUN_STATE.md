@@ -14,14 +14,16 @@ Harness mounted on 2026-11-16, **awaiting the owner's acceptance**.
   emulator (EV-001, EV-002). **Not yet checked on real devices** (BL-002).
 - Store: no Google Play developer account yet (BL-005). Pricing changed to
   free listening plus a one-time hosting unlock (ADR 0008).
-- Harness: mounted; doctor run recorded in `agents/validation/DOCTOR.md`;
-  mount review in `agents/reviews/20261116/`.
+- Harness: mounted; independent mount review in `agents/reviews/20261116/`
+  approved with fixes, and the fixes are applied; doctor passes with no
+  blockers (`agents/validation/DOCTOR.md`).
 - Implementation is blocked until the owner accepts the mounted harness.
 
 ## Next Action
 
 Owner: accept or correct the harness, especially the assumptions in
-`agents/intake/ASSUMPTIONS.md` and the proposed ADRs. Meanwhile, install 0.3.0
+`agents/intake/ASSUMPTIONS.md`, the proposed ADRs, the unlock design in
+ADR 0008, the trial length, and the commit identity (BL-019). Meanwhile, install 0.3.0
 on the tablet and phone and report pairing, steadiness ("% lost", dropouts) and
 lip sync (BL-002).
 

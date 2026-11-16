@@ -106,9 +106,8 @@ it. Prefer a temporary commit.
 - **Versions:** bump `versionCode` and `versionName` in `app/build.gradle.kts`
   for every build handed to the owner, so builds can be told apart.
 - **Text changes** land in English and Spanish together (GATE-L10N).
-- **Branch:** the cloud agent session currently pushes to
-  `claude/android-audio-streaming-xmkci1`; release work moves to `main`
-  (ADR 0003, BL-010).
+- **Branch:** development so far is on `claude/android-audio-streaming-xmkci1`;
+  release work moves to `main` (ADR 0003, BL-010).
 
 ## Naming When More Than One Developer Contributes
 

@@ -27,13 +27,14 @@ There are no instrumented (on-device) tests and no UI tests.
 | Real device | GATE-DEVICE | Owner installs the release APK on the tablet and phone and reports | Owner report |
 | String parity | GATE-L10N | Compare string names in `values/` and `values-es/` | Check output |
 
-## Known Limits Of Agent Testing Here
+## Limits Of Agent Testing
 
-- Emulators run without hardware acceleration: slow, with CPU-bound figures
-  (late audio, dropouts) that do not reflect real phones.
-- Emulator images used so far have no Google Play services, so the QR scanner
-  path cannot be exercised; only its fallback can.
-- No audio output and no screenshots from the headless emulator.
+- Agents cannot hear the audio or judge sync; that is GATE-DEVICE.
+- Emulator performance figures (late audio, dropouts) say little about phones,
+  especially without hardware acceleration.
+- Emulator images without Google Play services cannot exercise the QR scanner,
+  only its fallback; the in-app purchase needs a Play test track.
+- Check your own `agents/local/CAPABILITIES.md` for what your emulator can do.
 
 ## Rule
 

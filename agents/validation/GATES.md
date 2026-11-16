@@ -22,9 +22,10 @@ English only (ADR 0002).
 - R8 shrinking broke the QR scanner library in 0.3.0 in a way only the release
   build showed (a crash inside the library, caught in the emulator). Debug-only
   testing is not enough.
-- Audio quality, lip sync and Wi-Fi behaviour cannot be observed by an agent:
-  the build machine's emulators have no audio output, no hardware acceleration,
-  and cannot capture the screen. Only the owner's devices can pass GATE-DEVICE.
+- Audio quality, lip sync and Wi-Fi behaviour cannot be observed by an agent.
+  Only the owner's devices can pass GATE-DEVICE. What a given agent's emulator
+  can and cannot show is environment truth, recorded in its own
+  `agents/local/CAPABILITIES.md`.
 
 ## Local Mount Gate
 

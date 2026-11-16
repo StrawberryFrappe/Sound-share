@@ -16,20 +16,30 @@ working without internet.
 
 ## Decision
 
+Decided by the owner on 2026-11-16:
+
 - **One free app** on Google Play. Listening is always free.
-- **Hosting is unlocked by a one-time in-app purchase of 500 CLP** (a
-  non-consumable product, bought through Google Play Billing). No subscription,
-  no ads, no accounts.
+- **Hosting is unlocked by a one-time in-app purchase of 500 CLP.** No
+  subscription, no ads, no accounts.
 - **A short free hosting trial**, so a buyer can check that their video app
   allows its sound to be shared before paying. Its length and form are an open
   question (`agents/intake/QUESTIONS_SUMMARY.md`).
-- **Works offline after purchase.** The app records "hosting unlocked" on the
-  device when Google Play confirms the purchase, and trusts that record without
-  a connection, indefinitely. When online, it re-checks with Google Play, which
-  also restores the unlock after a reinstall and removes it after a refund.
-  Streaming itself never needs the internet.
+- **Hosting keeps working offline after purchase.** This was the owner's
+  condition for choosing the unlock over a separate paid app.
+
+## Proposed Design
+
+Proposed by the agent to meet the owner's condition; the owner confirms or
+corrects it when accepting the harness.
+
+- A non-consumable product bought through Google Play Billing.
+- The app records "hosting unlocked" on the device when Google Play confirms
+  the purchase, and trusts that record without a connection, indefinitely.
+  When online, it re-checks with Google Play, which also restores the unlock
+  after a reinstall and removes it after a refund. Streaming itself never needs
+  the internet.
 - Purchase checks happen on the device only; there is no server. A rooted
-  device could fake the unlock; at this price that risk is accepted.
+  device could fake the unlock (ASM-010).
 
 ## Consequences
 

@@ -34,7 +34,12 @@ Tests: `app/src/test/java/io/github/strawberryfrappe/soundshare/core/`.
 ## Consequences
 
 - Strangers on the network cannot listen, inject sound, or redirect the stream
-  (covered by `StreamLoopbackTest`).
+  (covered by `StreamLoopbackTest`). One limit: the hello's source address is
+  not authenticated, so someone who can sniff the network could replay a fresh
+  hello from a spoofed address and redirect the stream for up to about 5 s at a
+  time (ASM-005).
+- The audio sequence number is 32-bit, so nonces stay unique only for a
+  single session shorter than about 248 days of continuous streaming.
 - Not a password-authenticated key exchange: someone who captures the traffic
   **and** already knows the code could decrypt it. Acceptable for this threat
   model (ASM-005).

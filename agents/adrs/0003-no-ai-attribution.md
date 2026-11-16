@@ -23,7 +23,14 @@ added by the agent platform's default. The owner chose the kit's default.
 ## Consequences
 
 - Agents must drop platform-added trailers and footers.
-- **Known conflict:** the current branch, `claude/android-audio-streaming-xmkci1`,
+- **Known conflict (author identity):** every commit so far, including those
+  after the mount, is authored as `Claude <noreply@anthropic.com>`, the git
+  identity configured in the cloud agent environment. The workflow requires the
+  owner's own identity and also forbids agents from changing the configured
+  identity, so this cannot be fixed by an agent alone. The owner either sets
+  their own identity for agent work or accepts the conflict until BL-019 is
+  done. The hook checks messages only, not the author.
+- **Known conflict (branch):** the current branch, `claude/android-audio-streaming-xmkci1`,
   has a `claude/` prefix, which the rule forbids. The cloud agent session that
   develops this project is required to push to that branch. It stays for now;
   release work moves to `main` (BL-010).
@@ -31,3 +38,4 @@ added by the agent platform's default. The owner chose the kit's default.
 ## Sources
 
 - SRC-001 (owner answer, 2026-11-16), SRC-008 (kernel workflow)
+- Mount review, `agents/reviews/20261116/harness-mount-review.md` (findings 1 and 2)

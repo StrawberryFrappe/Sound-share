@@ -9,8 +9,8 @@ Google Play. No backend.
 
 **Early product.** The core works end to end (capture, encrypted UDP transport,
 jitter buffering, playback, QR pairing, English and Spanish UI) and has been
-installed and used by the owner on real devices up to 0.2.0. 0.3.0 has only been
-exercised in emulators. Nothing is published, and the store requirements
+installed and used by the owner on real devices (0.1.0 confirmed by the owner).
+0.3.0 has only been exercised in emulators. Nothing is published, and the store requirements
 (account, listing, policy declarations, closed test) are not started.
 
 Broad refactors are not wanted; changes should be incremental.
@@ -19,8 +19,7 @@ Broad refactors are not wanted; changes should be incremental.
 
 - **Real-device behaviour is the truth, and agents cannot observe it.** Audio
   quality, lip sync and Wi-Fi robustness can only be judged by the owner on
-  real hardware. Emulators here run without hardware acceleration and without
-  audio output.
+  real hardware. Emulator results do not stand in for them.
 - **Buyer expectations.** Netflix and similar apps cannot be shared. Unclear
   messaging means refunds and bad reviews; the free hosting trial (ADR 0008)
   lets people check first.
@@ -47,10 +46,11 @@ Broad refactors are not wanted; changes should be incremental.
 | GATE-LOCAL Local Mount | yes | Always required |
 | GATE-DR Doctor | yes | Always required |
 | GATE-TEST Tests | yes | Code project with a JVM test suite and lint |
+| GATE-RELEASE Release Smoke | yes | R8 shrinking has broken a library in release builds only |
 | GATE-DEVICE Real Device | yes | Audio behaviour can only be verified on hardware |
 | GATE-L10N App Strings | yes | App ships in English and Spanish |
 | GATE-DEPLOY Deployment | yes | Google Play is the target; blocked until a developer account exists |
-| GATE-PQ Portfolio Quality | yes | Paid, user-facing app with store screenshots |
+| GATE-PQ Portfolio Quality | yes | User-facing app sold through an in-app unlock, with store screenshots |
 | GATE-I18N Translation Currency | no | Harness docs are English only (ADR 0002) |
 
 ## Evidence Bar
@@ -59,8 +59,7 @@ Broad refactors are not wanted; changes should be incremental.
 - Release-build smoke run in an emulator for anything touching startup,
   libraries or shrinking.
 - The owner's report from real devices for anything audible or visible.
-- Screenshots from real devices for store and polish work (headless emulators
-  here cannot capture the screen).
+- Screenshots from real devices for store and polish work.
 
 ## Deployment Posture
 

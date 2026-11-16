@@ -67,7 +67,7 @@ Findings are tagged with a category so severity can be reasoned about per check.
 
 | Date | Result | Hard Blockers | Warnings | Next Action |
 |---|---|---|---|---|
-| TBD | TBD | TBD | TBD | TBD |
+| 2026-11-16 | Pass (exit 0), after the mount review fixes | 0 | 8: six files under `agents/templates/` and `agents/record/README.md` match the kernel on purpose (they are generic by design); `agents/execution/HANDOFF.md` is the empty template because nobody is mid-pass | Owner accepts or corrects the harness |
 
 ## Script Policy
 
