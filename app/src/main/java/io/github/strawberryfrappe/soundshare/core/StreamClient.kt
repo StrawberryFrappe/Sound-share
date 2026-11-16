@@ -6,26 +6,48 @@ import java.net.DatagramSocket
 import java.net.InetSocketAddress
 import java.net.SocketException
 import java.net.SocketTimeoutException
+import java.security.SecureRandom
+import java.util.concurrent.atomic.AtomicLong
+import javax.crypto.SecretKey
 import kotlin.concurrent.thread
 
 /**
  * The network half of the listening device.
  *
- * It says hello to the sender about once a second for as long as it runs, so
- * the stream resumes by itself after a Wi-Fi dropout or after the sender is
- * restarted, and hands every audio packet it gets to the [listener].
+ * It asks the sender for its current session, proves it holds the pairing
+ * code by saying an encrypted hello about once a second, and hands every
+ * audio packet that decrypts to the [listener]. It keeps going by itself
+ * through Wi-Fi dropouts and through the sender restarting its stream.
  */
 class StreamClient(
     private val server: InetSocketAddress,
+    private val code: PairingCode,
+    private val deviceName: String,
     private val listener: Listener,
+    random: SecureRandom = SecureRandom(),
 ) {
     interface Listener {
         /** Called on the network thread. The PCM is at [offset] in [buf] and is only valid during the call. */
-        fun onAudio(sessionId: Int, seq: Long, buf: ByteArray, offset: Int, length: Int)
+        fun onAudio(sessionTag: Int, seq: Long, buf: ByteArray, offset: Int, length: Int)
 
         /** The sender said it stopped sharing. */
         fun onSenderStopped()
+
+        /** The device at this address has a different pairing code: it made a new one, or it is another device. */
+        fun onWrongCode()
     }
+
+    private val listenerId = ByteArray(Protocol.LISTENER_ID_SIZE).also(random::nextBytes)
+    // Shared by the receive thread and the goodbye thread; a repeated value would reuse a nonce.
+    private val counter = AtomicLong()
+
+    // Only touched by the receive thread, except for the final goodbye.
+    @Volatile
+    private var key: SecretKey? = null
+    private var sessionTag = 0
+    private var lastAudioNanos = 0L
+    private var sessionStartNanos = 0L
+    private var reportedWrongCode = false
 
     private var socket: DatagramSocket? = null
 
@@ -47,23 +69,31 @@ class StreamClient(
         if (!running) return
         running = false
         val s = socket ?: return
+        val sessionKey = key
         // Network calls are not allowed on Android's main thread, where stop() is usually called.
         thread(name = "soundshare-bye", isDaemon = true) {
-            send(s, Protocol.control(Protocol.TYPE_BYE))
+            if (sessionKey != null) {
+                send(s, Protocol.sealListenerMessage(Protocol.TYPE_BYE, sessionKey, listenerId, counter.incrementAndGet(), deviceName))
+            }
             s.close()
         }
     }
 
     private fun receiveLoop(s: DatagramSocket) {
-        val hello = Protocol.control(Protocol.TYPE_HELLO)
         val buf = ByteArray(Protocol.MAX_PACKET_SIZE)
+        val pcm = ByteArray(Protocol.PACKET_PCM_BYTES)
         val incoming = DatagramPacket(buf, buf.size)
-        var lastHello = 0L
+        var lastSent = 0L
         while (running) {
             val now = System.nanoTime()
-            if (lastHello == 0L || now - lastHello >= Protocol.HELLO_INTERVAL_MS * 1_000_000) {
-                send(s, hello)
-                lastHello = now
+            val sessionKey = key
+            if (sessionKey != null && now - maxOf(lastAudioNanos, sessionStartNanos) > SESSION_SILENCE_NANOS) {
+                // Hellos are not getting through, or the sender started a new session: ask again.
+                key = null
+            }
+            if (lastSent == 0L || now - lastSent >= Protocol.HELLO_INTERVAL_MS * 1_000_000) {
+                sayHelloOrProbe(s)
+                lastSent = now
             }
             try {
                 incoming.length = buf.size
@@ -77,17 +107,60 @@ class StreamClient(
             }
             if (incoming.address != server.address) continue
             when (Protocol.typeOf(buf, incoming.length)) {
-                Protocol.TYPE_AUDIO -> if (incoming.length == Protocol.AUDIO_PACKET_SIZE) {
-                    listener.onAudio(
-                        Protocol.audioSessionId(buf),
-                        Protocol.audioSeq(buf),
-                        buf,
-                        Protocol.AUDIO_HEADER_SIZE,
-                        Protocol.PACKET_PCM_BYTES,
-                    )
+                Protocol.TYPE_BEACON -> {
+                    val beacon = Protocol.decodeBeacon(buf, incoming.length) ?: continue
+                    if (onBeacon(beacon)) {
+                        sayHelloOrProbe(s)
+                        lastSent = System.nanoTime()
+                    }
                 }
-                Protocol.TYPE_BYE -> listener.onSenderStopped()
+                Protocol.TYPE_AUDIO -> {
+                    val currentKey = key ?: continue
+                    if (Protocol.packetSessionTag(buf) != sessionTag) {
+                        key = null
+                        continue
+                    }
+                    if (!Protocol.openAudio(buf, incoming.length, currentKey, pcm)) continue
+                    lastAudioNanos = System.nanoTime()
+                    listener.onAudio(sessionTag, Protocol.packetSeq(buf), pcm, 0, pcm.size)
+                }
+                Protocol.TYPE_SENDER_BYE -> {
+                    val currentKey = key ?: continue
+                    if (Protocol.packetSessionTag(buf) == sessionTag &&
+                        Protocol.verifySenderBye(buf, incoming.length, currentKey)
+                    ) {
+                        key = null
+                        listener.onSenderStopped()
+                    }
+                }
             }
+        }
+    }
+
+    /** Takes up the session a beacon announces. Returns true if it is a new one. */
+    private fun onBeacon(beacon: Protocol.Beacon): Boolean {
+        if (!beacon.keyId.contentEquals(code.keyId)) {
+            if (!reportedWrongCode) {
+                reportedWrongCode = true
+                listener.onWrongCode()
+            }
+            return false
+        }
+        reportedWrongCode = false
+        val tag = Protocol.sessionTag(beacon.sessionNonce)
+        if (key != null && tag == sessionTag) return false
+        key = code.sessionKey(beacon.sessionNonce)
+        sessionTag = tag
+        sessionStartNanos = System.nanoTime()
+        return true
+    }
+
+    private fun sayHelloOrProbe(s: DatagramSocket) {
+        val sessionKey = key
+        if (sessionKey == null) {
+            send(s, Protocol.probe())
+        } else {
+            send(s, Protocol.sealListenerMessage(Protocol.TYPE_HELLO, sessionKey, listenerId, counter.incrementAndGet(), deviceName))
         }
     }
 
@@ -95,12 +168,13 @@ class StreamClient(
         try {
             s.send(DatagramPacket(payload, payload.size, server))
         } catch (_: IOException) {
-            // The network may be briefly away; the next hello tries again.
+            // The network may be briefly away; the next round tries again.
         }
     }
 
     private companion object {
         const val RECEIVE_TIMEOUT_MS = 250
         const val RECEIVE_BUFFER_BYTES = 256 * 1024
+        const val SESSION_SILENCE_NANOS = 3_000_000_000L
     }
 }

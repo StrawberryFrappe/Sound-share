@@ -19,13 +19,16 @@ import android.os.Process
 import androidx.annotation.StringRes
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
+import io.github.strawberryfrappe.soundshare.PairingStore
 import io.github.strawberryfrappe.soundshare.R
 import io.github.strawberryfrappe.soundshare.ShareState
 import io.github.strawberryfrappe.soundshare.StreamingLocks
 import io.github.strawberryfrappe.soundshare.core.JitterBuffer
 import io.github.strawberryfrappe.soundshare.core.LossConcealer
+import io.github.strawberryfrappe.soundshare.core.PairingCode
 import io.github.strawberryfrappe.soundshare.core.Protocol
 import io.github.strawberryfrappe.soundshare.core.StreamClient
+import io.github.strawberryfrappe.soundshare.deviceName
 import io.github.strawberryfrappe.soundshare.streamingNotification
 import java.io.IOException
 import java.net.InetAddress
@@ -47,6 +50,7 @@ class PlaybackService : Service(), StreamClient.Listener {
     private var locks: StreamingLocks? = null
     private var focusRequest: AudioFocusRequest? = null
     private var senderName = ""
+    private var code: PairingCode? = null
 
     @Volatile
     private var track: AudioTrack? = null
@@ -64,7 +68,10 @@ class PlaybackService : Service(), StreamClient.Listener {
 
     @Volatile
     private var senderStopped = false
-    private var sessionId: Int? = null
+
+    @Volatile
+    private var wrongCode = false
+    private var sessionTag: Int? = null
 
     private val focusListener = AudioManager.OnAudioFocusChangeListener { change ->
         when (change) {
@@ -94,6 +101,7 @@ class PlaybackService : Service(), StreamClient.Listener {
         val host = intent?.getStringExtra(EXTRA_HOST).orEmpty()
         val port = intent?.getIntExtra(EXTRA_PORT, Protocol.AUDIO_PORT) ?: Protocol.AUDIO_PORT
         senderName = intent?.getStringExtra(EXTRA_NAME).orEmpty().ifBlank { host }
+        code = intent?.getStringExtra(EXTRA_CODE)?.let(PairingCode::parse)
 
         ServiceCompat.startForeground(
             this,
@@ -101,7 +109,8 @@ class PlaybackService : Service(), StreamClient.Listener {
             streamingNotification(getString(R.string.notification_listening, senderName), stopIntent(this)),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK else 0,
         )
-        if (host.isEmpty()) {
+        val code = code
+        if (host.isEmpty() || code == null) {
             error = R.string.error_address
             stopSelf()
             return START_NOT_STICKY
@@ -117,18 +126,18 @@ class PlaybackService : Service(), StreamClient.Listener {
         )
         running = true
         publishStatus()
-        playThread = thread(name = "soundshare-playback") { playLoop(host, port) }
+        playThread = thread(name = "soundshare-playback") { playLoop(host, port, code) }
         return START_NOT_STICKY
     }
 
-    private fun playLoop(host: String, port: Int) {
+    private fun playLoop(host: String, port: Int, code: PairingCode) {
         Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
         try {
             val address = InetSocketAddress(InetAddress.getByName(host), port)
             val track = buildTrack()
             this.track = track
             track.play()
-            client = StreamClient(address, this).also { it.start() }
+            client = StreamClient(address, code, deviceName(this), this).also { it.start() }
 
             val out = ByteArray(jitter.maxPullBytes)
             var appliedDelayMs = -1
@@ -181,11 +190,12 @@ class PlaybackService : Service(), StreamClient.Listener {
         return builder.build()
     }
 
-    override fun onAudio(sessionId: Int, seq: Long, buf: ByteArray, offset: Int, length: Int) {
-        if (sessionId != this.sessionId) {
+    override fun onAudio(sessionTag: Int, seq: Long, buf: ByteArray, offset: Int, length: Int) {
+        wrongCode = false
+        if (sessionTag != this.sessionTag) {
             // The sharing device restarted its stream; its packet numbers start over.
             jitter.reset()
-            this.sessionId = sessionId
+            this.sessionTag = sessionTag
         }
         jitter.push(seq, buf, offset, length)
         senderStopped = false
@@ -196,11 +206,18 @@ class PlaybackService : Service(), StreamClient.Listener {
         senderStopped = true
     }
 
+    override fun onWrongCode() {
+        wrongCode = true
+        // The sender made a new code; the saved one is useless now.
+        code?.let { PairingStore(this).forget(it) }
+    }
+
     private fun publishStatus() {
         val sinceAudioMs = (System.nanoTime() - lastAudioNanos) / 1_000_000
         val link = when {
+            lastAudioNanos != 0L && sinceAudioMs < SIGNAL_TIMEOUT_MS -> ShareState.Link.PLAYING
+            wrongCode -> ShareState.Link.WRONG_CODE
             lastAudioNanos == 0L -> if (senderStopped) ShareState.Link.SENDER_STOPPED else ShareState.Link.CONNECTING
-            sinceAudioMs < SIGNAL_TIMEOUT_MS -> ShareState.Link.PLAYING
             senderStopped -> ShareState.Link.SENDER_STOPPED
             else -> ShareState.Link.NO_SIGNAL
         }
@@ -260,6 +277,7 @@ class PlaybackService : Service(), StreamClient.Listener {
         private const val EXTRA_HOST = "host"
         private const val EXTRA_PORT = "port"
         private const val EXTRA_NAME = "name"
+        private const val EXTRA_CODE = "code"
 
         /** One status update per 200 ms of audio. */
         private const val PULLS_PER_STATUS = 40
@@ -270,13 +288,14 @@ class PlaybackService : Service(), StreamClient.Listener {
             .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
             .build()
 
-        /** Starts listening to the device at [host]. [name] is only for display. */
-        fun start(context: Context, host: String, port: Int, name: String) {
+        /** Starts listening to the device at [host], paired through [code]. [name] is only for display. */
+        fun start(context: Context, host: String, port: Int, name: String, code: PairingCode) {
             ShareState.receiver.value = ShareState.Receiver(running = true, senderName = name.ifBlank { host })
             val intent = Intent(context, PlaybackService::class.java)
                 .putExtra(EXTRA_HOST, host)
                 .putExtra(EXTRA_PORT, port)
                 .putExtra(EXTRA_NAME, name)
+                .putExtra(EXTRA_CODE, code.text)
             ContextCompat.startForegroundService(context, intent)
         }
 

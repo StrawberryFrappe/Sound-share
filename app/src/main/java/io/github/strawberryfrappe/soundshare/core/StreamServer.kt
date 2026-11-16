@@ -8,32 +8,50 @@ import java.net.InetSocketAddress
 import java.net.NetworkInterface
 import java.net.SocketAddress
 import java.net.SocketException
+import java.security.SecureRandom
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.thread
-import kotlin.random.Random
 
 /**
  * The network half of the sending device.
  *
- * It keeps a list of listeners (anyone who said hello in the last few
- * seconds), sends every audio packet to each of them, and broadcasts a beacon
- * on every local network so listeners can find this device without typing an
- * address.
+ * It streams encrypted audio to every paired listener that said hello in the
+ * last few seconds, and broadcasts a beacon on every local network so
+ * listeners can find this device without typing an address. A listener only
+ * counts once its hello decrypts with this session's key, so devices without
+ * the pairing code get nothing and cannot point the stream at anyone else.
  */
 class StreamServer(
     private val deviceName: String,
+    code: PairingCode,
     private val port: Int = Protocol.AUDIO_PORT,
     private val beaconPort: Int = Protocol.BEACON_PORT,
+    random: SecureRandom = SecureRandom(),
 ) {
-    val sessionId: Int = Random.nextInt()
+    private class Client(
+        @Volatile var address: SocketAddress,
+        val name: String,
+        @Volatile var lastSeen: Long,
+    )
+
+    private val keyId = code.keyId
+    private val sessionNonce = ByteArray(Protocol.SESSION_NONCE_SIZE).also(random::nextBytes)
+    private val sessionTag = Protocol.sessionTag(sessionNonce)
+    private val key = code.sessionKey(sessionNonce)
 
     private var socket: DatagramSocket? = null
-    private val clients = ConcurrentHashMap<SocketAddress, Long>()
+    private val clients = ConcurrentHashMap<Long, Client>()
+
+    /** The newest counter seen from every listener this session, kept after it leaves so replays stay useless. */
+    private val lastCounters = ConcurrentHashMap<Long, Long>()
     private val packet = ByteArray(Protocol.AUDIO_PACKET_SIZE)
     private var seq = 0
 
     @Volatile
     private var running = false
+
+    /** Names of the devices listening right now. */
+    val listenerNames: List<String> get() = clients.values.map { it.name }.sorted()
 
     val clientCount: Int get() = clients.size
 
@@ -62,11 +80,10 @@ class StreamServer(
         val thisSeq = seq++
         if (thisSeq % PRUNE_EVERY_PACKETS == 0) pruneClients()
         if (clients.isEmpty()) return
-        Protocol.putAudioHeader(packet, sessionId, thisSeq)
-        System.arraycopy(pcm, 0, packet, Protocol.AUDIO_HEADER_SIZE, Protocol.PACKET_PCM_BYTES)
-        for (address in clients.keys) {
+        val length = Protocol.sealAudio(packet, key, sessionTag, thisSeq, pcm)
+        for (client in clients.values) {
             try {
-                s.send(DatagramPacket(packet, packet.size, address))
+                s.send(DatagramPacket(packet, length, client.address))
             } catch (_: IOException) {
                 // A listener that cannot be reached right now is dropped by the timeout.
             }
@@ -77,12 +94,12 @@ class StreamServer(
         if (!running) return
         running = false
         val s = socket ?: return
+        val bye = Protocol.sealSenderBye(key, sessionTag, seq)
         // Network calls are not allowed on Android's main thread, where stop() may be called.
         thread(name = "soundshare-bye", isDaemon = true) {
-            val bye = Protocol.control(Protocol.TYPE_BYE)
-            for (address in clients.keys) {
+            for (client in clients.values) {
                 try {
-                    s.send(DatagramPacket(bye, bye.size, address))
+                    s.send(DatagramPacket(bye, bye.size, client.address))
                 } catch (_: IOException) {
                 }
             }
@@ -94,6 +111,7 @@ class StreamServer(
     private fun controlLoop(s: DatagramSocket) {
         val buf = ByteArray(Protocol.MAX_PACKET_SIZE)
         val incoming = DatagramPacket(buf, buf.size)
+        val beacon = Protocol.encodeBeacon(keyId, sessionNonce, s.localPort, deviceName)
         while (running) {
             try {
                 incoming.length = buf.size
@@ -104,14 +122,42 @@ class StreamServer(
                 continue
             }
             when (Protocol.typeOf(buf, incoming.length)) {
-                Protocol.TYPE_HELLO -> clients[incoming.socketAddress] = System.nanoTime()
-                Protocol.TYPE_BYE -> clients.remove(incoming.socketAddress)
+                Protocol.TYPE_PROBE -> if (incoming.length >= Protocol.PROBE_SIZE) {
+                    try {
+                        s.send(DatagramPacket(beacon, beacon.size, incoming.socketAddress))
+                    } catch (_: IOException) {
+                    }
+                }
+                Protocol.TYPE_HELLO, Protocol.TYPE_BYE -> {
+                    val message = Protocol.openListenerMessage(buf, incoming.length, key) ?: continue
+                    onListenerMessage(message, incoming.socketAddress)
+                }
             }
         }
     }
 
+    private fun onListenerMessage(message: Protocol.ListenerMessage, from: SocketAddress) {
+        // An old message played back by someone else.
+        val previous = lastCounters[message.listenerId]
+        if (previous != null && message.counter <= previous) return
+        lastCounters[message.listenerId] = message.counter
+
+        val now = System.nanoTime()
+        val client = clients[message.listenerId]
+        if (client != null) {
+            if (message.type == Protocol.TYPE_BYE) {
+                clients.remove(message.listenerId)
+                return
+            }
+            client.address = from
+            client.lastSeen = now
+        } else if (message.type == Protocol.TYPE_HELLO && clients.size < Protocol.MAX_LISTENERS) {
+            clients[message.listenerId] = Client(from, message.name, now)
+        }
+    }
+
     private fun beaconLoop(s: DatagramSocket) {
-        val beacon = Protocol.encodeBeacon(sessionId, s.localPort, deviceName)
+        val beacon = Protocol.encodeBeacon(keyId, sessionNonce, s.localPort, deviceName)
         while (running) {
             for (address in broadcastAddresses()) {
                 try {
@@ -129,7 +175,7 @@ class StreamServer(
 
     private fun pruneClients() {
         val cutoff = System.nanoTime() - Protocol.CLIENT_TIMEOUT_MS * 1_000_000
-        clients.entries.removeAll { it.value < cutoff }
+        clients.entries.removeAll { it.value.lastSeen < cutoff }
     }
 
     private companion object {

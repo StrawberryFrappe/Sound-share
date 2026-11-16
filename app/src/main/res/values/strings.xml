@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sound Share</string>
+    <string name="app_name" translatable="false">Sound Share</string>
 
     <string name="tab_share">Share audio</string>
     <string name="tab_listen">Listen</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Share tab -->
     <string name="share_intro">Send whatever this device is playing to another phone on the same Wi‑Fi, so someone can listen with their own headphones.</string>
@@ -11,33 +12,44 @@
     <string name="share_stop">Stop sharing</string>
     <string name="share_unsupported">Sharing needs Android 10 or newer. This device can still listen to another one.</string>
     <string name="share_running_title">Sharing this device\'s audio</string>
-    <string name="share_waiting">Waiting for a listener. Open Sound Share on the other phone and choose Listen.</string>
-    <plurals name="share_listeners">
-        <item quantity="one">%d device listening</item>
-        <item quantity="other">%d devices listening</item>
-    </plurals>
+    <string name="share_waiting">Waiting for a listener. On the other phone, open Sound Share, tap Listen and scan this code.</string>
+    <string name="share_listening_now">Listening now: %s</string>
+    <string name="share_scan_hint">Scan with Sound Share on the other phone</string>
     <string name="share_device_name">This device: %s</string>
     <string name="share_address">Address: %s</string>
     <string name="share_no_network">Not connected to Wi‑Fi. Join the same network as the other phone.</string>
     <string name="share_hint_volume">Sound keeps playing here too. Turn this device\'s volume down if only the other person should hear it.</string>
     <string name="share_hint_apps">Some apps, such as Netflix, do not allow their sound to be shared. With those, the other phone stays silent.</string>
     <string name="share_permission_needed">Android asks for the microphone permission before an app may capture what the device is playing. Sound Share never listens to the microphone itself. Allow it to start sharing.</string>
+    <string name="share_pairing_title">Paired phones</string>
+    <string name="share_pairing_body">Only phones that scanned this device\'s code can listen, and they can come back later without scanning again.</string>
+    <string name="share_new_code">Make a new code</string>
+    <string name="share_new_code_title">Make a new code?</string>
+    <string name="share_new_code_body">Phones paired with the current code will need to scan the new one.</string>
+    <string name="share_new_code_confirm">Make new code</string>
+    <string name="qr_description">QR code to pair with this device</string>
     <string name="error_capture">Could not capture this device\'s audio.</string>
     <string name="error_port">Could not open the network connection. Another app may be using it.</string>
 
     <!-- Listen tab -->
     <string name="listen_intro">Play another device\'s sound through this phone\'s headphones. Both devices must be on the same Wi‑Fi or hotspot.</string>
+    <string name="listen_scan">Scan code</string>
     <string name="listen_searching">Looking for devices that are sharing…</string>
-    <string name="listen_found">Sharing now</string>
-    <string name="listen_manual_title">Not listed?</string>
-    <string name="listen_manual_hint">Type the address shown on the sharing device.</string>
-    <string name="listen_address_label">Address</string>
+    <string name="listen_nearby">Sharing nearby</string>
+    <string name="listen_paired_tap">Tap to listen</string>
+    <string name="listen_unpaired_tap">Not paired yet. Tap to scan its code.</string>
+    <string name="listen_waiting_for_code">Looking for the device with this code…</string>
+    <string name="listen_enter_code">Type the code instead</string>
+    <string name="listen_manual_hint">Type the code shown under the QR code on the sharing device.</string>
+    <string name="listen_code_label">Code</string>
+    <string name="listen_address_label">Address (only if the device does not appear)</string>
     <string name="listen_connect">Connect</string>
     <string name="listen_stop">Stop listening</string>
     <string name="link_connecting">Connecting to %s…</string>
     <string name="link_playing">Listening to %s</string>
     <string name="link_no_signal">Lost the connection to %s. Trying again…</string>
     <string name="link_sender_stopped">%s stopped sharing. Waiting for it to start again…</string>
+    <string name="link_wrong_code">%s has a new code. Stop listening, then scan its new code.</string>
     <string name="delay_title">Delay: %d ms</string>
     <string name="delay_hint">Lower keeps the sound closer to the picture. Raise it if the sound cuts out, or if you hear things before they happen on screen.</string>
     <string name="stats_buffered">Buffered: %d ms</string>
@@ -48,6 +60,9 @@
     </plurals>
     <string name="error_address">Could not find a device at that address.</string>
     <string name="error_playback">Could not play audio on this phone.</string>
+    <string name="error_code">That code doesn\'t look right. Check it and try again.</string>
+    <string name="error_not_our_code">That QR code isn\'t from Sound Share.</string>
+    <string name="error_scanner">Couldn\'t open the scanner. Type the code instead.</string>
 
     <!-- Notifications -->
     <string name="channel_name">Sharing and listening</string>

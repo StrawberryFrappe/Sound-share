@@ -9,8 +9,8 @@ import java.net.SocketException
 import java.net.SocketTimeoutException
 import kotlin.concurrent.thread
 
-/** A device that is currently sharing its audio on this network. */
-data class SenderInfo(val name: String, val address: InetAddress, val port: Int)
+/** A device that is currently sharing its audio on this network. [keyId] tells which pairing code it uses. */
+data class SenderInfo(val name: String, val address: InetAddress, val port: Int, val keyId: String)
 
 /**
  * Listens for the beacons that sharing devices broadcast and reports the
@@ -68,7 +68,8 @@ class BeaconListener(
                 s.receive(incoming)
                 val beacon = Protocol.decodeBeacon(buf, incoming.length)
                 if (beacon != null) {
-                    lastSeen[SenderInfo(beacon.name, incoming.address, beacon.port)] = System.nanoTime()
+                    lastSeen[SenderInfo(beacon.name, incoming.address, beacon.port, beacon.keyId.toHex())] =
+                        System.nanoTime()
                 }
             } catch (_: SocketTimeoutException) {
             } catch (_: SocketException) {

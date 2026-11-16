@@ -17,15 +17,16 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.os.Process
-import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
+import io.github.strawberryfrappe.soundshare.PairingStore
 import io.github.strawberryfrappe.soundshare.R
 import io.github.strawberryfrappe.soundshare.ShareState
 import io.github.strawberryfrappe.soundshare.StreamingLocks
+import io.github.strawberryfrappe.soundshare.deviceName
 import io.github.strawberryfrappe.soundshare.core.Protocol
 import io.github.strawberryfrappe.soundshare.core.StreamServer
 import io.github.strawberryfrappe.soundshare.streamingNotification
@@ -123,7 +124,7 @@ class CaptureService : Service() {
         }
         this.record = record
 
-        val server = StreamServer(deviceName(this))
+        val server = StreamServer(deviceName(this), PairingStore(this).senderCode())
         this.server = server
         locks = StreamingLocks(this, "share").also { it.acquire() }
         running = true
@@ -151,7 +152,7 @@ class CaptureService : Service() {
                 }
                 server.sendAudio(pcm)
                 if (++packets % PACKETS_PER_STATUS == 0) {
-                    val listeners = server.clientCount
+                    val listeners = server.listenerNames
                     if (ShareState.sender.value.listeners != listeners) {
                         ShareState.sender.value = ShareState.Sender(running = true, listeners = listeners)
                     }
@@ -206,11 +207,5 @@ class CaptureService : Service() {
 
         private fun stopIntent(context: Context) =
             Intent(context, CaptureService::class.java).setAction(ACTION_STOP)
-
-        /** The name the user gave this device, as the listener will see it. */
-        fun deviceName(context: Context): String =
-            Settings.Global.getString(context.contentResolver, Settings.Global.DEVICE_NAME)
-                ?.takeIf { it.isNotBlank() }
-                ?: Build.MODEL
     }
 }

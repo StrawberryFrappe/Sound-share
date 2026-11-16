@@ -20,9 +20,14 @@ phone choose **Listen**.
    prompt; accept both. (Android has no separate permission for "the sound
    this device is playing". The microphone itself is never used, and the
    picture is never captured.)
-3. On the phone: open Sound Share, **Listen**, and tap the tablet when it
-   appears. If it does not appear, type the address shown on the tablet.
+3. On the phone: open Sound Share, **Listen**, **Scan code**, and scan the QR
+   code on the tablet. Without a camera scanner, tap **Type the code instead**
+   and type the 16 characters under the QR code.
 4. Start the video on the tablet.
+
+The phone remembers the tablet: next time, tap it in the list. Only paired
+phones can listen. To unpair everyone, make a new code on the tablet's
+**Share audio** tab.
 
 Things to know while watching:
 
@@ -39,7 +44,7 @@ Things to know while watching:
   so are Bluetooth headphones on the tablet, which share its radio with
   2.4 GHz Wi‑Fi. A 5 GHz network avoids both, if both devices support it.
 - Listening stops by itself when the headphones are unplugged.
-- Several phones can listen to one tablet at the same time.
+- Up to eight phones can listen to one tablet at the same time.
 
 ## Requirements and limits
 
@@ -53,6 +58,18 @@ Things to know while watching:
   block that.
 - Wi‑Fi only. An Android phone cannot act as a Bluetooth headset for another
   device, and Bluetooth is too slow to carry uncompressed sound by other means.
+
+## Privacy and security
+
+Sound never leaves the local network, and the app collects nothing: see
+[PRIVACY.md](PRIVACY.md).
+
+On the network, everything but discovery is encrypted and authenticated with
+AES‑128‑GCM, using a key derived from the tablet's pairing code (72 random
+bits) and fresh for every sharing session. A device without the code cannot
+listen, cannot feed a listener sound, and cannot make the tablet send its
+stream anywhere. Discovery broadcasts carry the tablet's device name and an
+identifier of its code, not the code itself.
 
 ## Building
 

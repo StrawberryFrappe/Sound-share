@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_share">Compartir audio</string>
+    <string name="tab_listen">Escuchar</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- Pestaña Compartir -->
+    <string name="share_intro">Envía lo que suena en este dispositivo a otro teléfono en la misma red Wi‑Fi, para que alguien escuche con sus propios audífonos.</string>
+    <string name="share_start">Empezar a compartir</string>
+    <string name="share_stop">Dejar de compartir</string>
+    <string name="share_unsupported">Para compartir se necesita Android 10 o superior. Este dispositivo igual puede escuchar a otro.</string>
+    <string name="share_running_title">Compartiendo el audio de este dispositivo</string>
+    <string name="share_waiting">Esperando a alguien que escuche. En el otro teléfono, abre Sound Share, toca Escuchar y escanea este código.</string>
+    <string name="share_listening_now">Escuchando ahora: %s</string>
+    <string name="share_scan_hint">Escanéalo con Sound Share en el otro teléfono</string>
+    <string name="share_device_name">Este dispositivo: %s</string>
+    <string name="share_address">Dirección: %s</string>
+    <string name="share_no_network">Sin conexión Wi‑Fi. Conéctate a la misma red que el otro teléfono.</string>
+    <string name="share_hint_volume">El sonido sigue saliendo aquí también. Baja el volumen de este dispositivo si solo debe escuchar la otra persona.</string>
+    <string name="share_hint_apps">Algunas apps, como Netflix, no permiten compartir su sonido. Con esas, el otro teléfono queda en silencio.</string>
+    <string name="share_permission_needed">Android pide el permiso de micrófono antes de que una app pueda capturar lo que suena en el dispositivo. Sound Share nunca escucha el micrófono. Permítelo para empezar a compartir.</string>
+    <string name="share_pairing_title">Teléfonos vinculados</string>
+    <string name="share_pairing_body">Solo pueden escuchar los teléfonos que escanearon el código de este dispositivo, y después pueden volver sin escanearlo otra vez.</string>
+    <string name="share_new_code">Crear un código nuevo</string>
+    <string name="share_new_code_title">¿Crear un código nuevo?</string>
+    <string name="share_new_code_body">Los teléfonos vinculados con el código actual tendrán que escanear el nuevo.</string>
+    <string name="share_new_code_confirm">Crear código nuevo</string>
+    <string name="qr_description">Código QR para vincularse con este dispositivo</string>
+    <string name="error_capture">No se pudo capturar el audio de este dispositivo.</string>
+    <string name="error_port">No se pudo abrir la conexión de red. Puede que otra app la esté usando.</string>
+
+    <!-- Pestaña Escuchar -->
+    <string name="listen_intro">Escucha el sonido de otro dispositivo en los audífonos de este teléfono. Ambos deben estar en la misma red Wi‑Fi o punto de acceso.</string>
+    <string name="listen_scan">Escanear código</string>
+    <string name="listen_searching">Buscando dispositivos que estén compartiendo…</string>
+    <string name="listen_nearby">Compartiendo cerca</string>
+    <string name="listen_paired_tap">Toca para escuchar</string>
+    <string name="listen_unpaired_tap">Aún no vinculado. Toca para escanear su código.</string>
+    <string name="listen_waiting_for_code">Buscando el dispositivo con este código…</string>
+    <string name="listen_enter_code">Escribir el código</string>
+    <string name="listen_manual_hint">Escribe el código que aparece bajo el código QR en el dispositivo que comparte.</string>
+    <string name="listen_code_label">Código</string>
+    <string name="listen_address_label">Dirección (solo si el dispositivo no aparece)</string>
+    <string name="listen_connect">Conectar</string>
+    <string name="listen_stop">Dejar de escuchar</string>
+    <string name="link_connecting">Conectando con %s…</string>
+    <string name="link_playing">Escuchando %s</string>
+    <string name="link_no_signal">Se perdió la conexión con %s. Reintentando…</string>
+    <string name="link_sender_stopped">%s dejó de compartir. Esperando a que vuelva a empezar…</string>
+    <string name="link_wrong_code">%s tiene un código nuevo. Deja de escuchar y escanea su código nuevo.</string>
+    <string name="delay_title">Retraso: %d ms</string>
+    <string name="delay_hint">Menos retraso acerca el sonido a la imagen. Súbelo si el sonido se corta o si escuchas las cosas antes de que pasen en pantalla.</string>
+    <string name="stats_buffered">En búfer: %d ms</string>
+    <string name="stats_lost">%s%% perdido</string>
+    <plurals name="stats_dropouts">
+        <item quantity="one">%d corte</item>
+        <item quantity="many">%d cortes</item>
+        <item quantity="other">%d cortes</item>
+    </plurals>
+    <string name="error_address">No se encontró un dispositivo en esa dirección.</string>
+    <string name="error_playback">No se pudo reproducir audio en este teléfono.</string>
+    <string name="error_code">Ese código no parece correcto. Revísalo e inténtalo de nuevo.</string>
+    <string name="error_not_our_code">Ese código QR no es de Sound Share.</string>
+    <string name="error_scanner">No se pudo abrir el escáner. Escribe el código.</string>
+
+    <!-- Notificaciones -->
+    <string name="channel_name">Compartir y escuchar</string>
+    <string name="notification_sharing">Compartiendo el audio de este dispositivo</string>
+    <string name="notification_listening">Escuchando %s</string>
+    <string name="notification_stop">Detener</string>
+</resources>

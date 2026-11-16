@@ -7,11 +7,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 object ShareState {
     data class Sender(
         val running: Boolean = false,
-        val listeners: Int = 0,
+        /** Names of the devices listening right now. */
+        val listeners: List<String> = emptyList(),
         @param:StringRes val error: Int? = null,
     )
 
-    enum class Link { CONNECTING, PLAYING, NO_SIGNAL, SENDER_STOPPED }
+    enum class Link { CONNECTING, PLAYING, NO_SIGNAL, SENDER_STOPPED, WRONG_CODE }
 
     data class Receiver(
         val running: Boolean = false,
