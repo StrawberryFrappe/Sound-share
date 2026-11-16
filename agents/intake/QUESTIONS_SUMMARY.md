@@ -12,7 +12,8 @@ Accepted answers in digestible form. The raw answers stay in `agents/local/`.
 | 2026-11-16 | Contributors | Just the owner, with one stakeholder in mind | ADR 0002 |
 | 2026-11-16 | Stakeholder | The person listening (phone with wired headphones) | `agents/intake/PROJECT_BRIEF.md` |
 | 2026-11-16 | AI attribution | None from now on; the commit hook is enabled. Earlier commits keep their trailers | ADR 0003 |
-| 2026-11-16 | Pricing | Paid app, 500 CLP; no in-app purchases | ADR 0004 |
+| 2026-11-16 | Pricing (first answer) | Paid app, 500 CLP; no in-app purchases | ADR 0004, superseded |
+| 2026-11-16 | Pricing (owner's revision) | Free app; listening free; hosting unlocked by a one-time 500 CLP in-app purchase that keeps working offline; a short free hosting trial | ADR 0008 |
 | 2026-11-16 | Harness language | English | ADR 0002 |
 | 2026-11-16 | Play developer account | Not yet created | `agents/planning/BACKLOG.md` BL-005 |
 | 2026-11-16 | Hotspot feature | Before launch | ADR 0007 |
@@ -30,7 +31,8 @@ Accepted answers in digestible form. The raw answers stay in `agents/local/`.
 | P2 | Should a requirements spec (SRS) exist? | The kit offers one; the project is small | No SRS; ADRs and the backlog carry intent |
 | P2 | Model and usage budget for subagents | The workflow assigns model tiers; cost is the owner's | Follow the workflow's tier table; keep fan-out small |
 | P2 | Should Spanish be the store listing's default language? | First market is Chile | Spanish default, English secondary |
-| P3 | Is the Play Store minimum price in CLP at or below 500? | The price must be allowed | Check in the Play Console when the account exists |
+| P1 | How long, and what kind, is the free hosting trial (minutes in total, minutes per session, a number of sessions)? | Too short and buyers cannot check their apps; per-session limits can be restarted forever | 30 minutes of hosting in total, then the unlock is required |
+| P3 | Is 500 CLP an allowed in-app product price in Chile? | The price must be allowed | Check in the Play Console when the account exists |
 
 ## Grill Checklist
 

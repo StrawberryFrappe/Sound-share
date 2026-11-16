@@ -23,7 +23,8 @@ so later changes are deliberate.
   Compression (Opus) only if real-device loss shows the network cannot carry
   1.5 Mbit/s (BL-013).
 - Libraries kept minimal: AndroidX, ZXing core (QR drawing), Google Play
-  services code scanner (QR scanning without the camera permission).
+  services code scanner (QR scanning without the camera permission), and Google
+  Play Billing for the hosting unlock (ADR 0008).
 
 Exact versions live in `gradle/libs.versions.toml` and
 `agents/architecture/TECH_STACK.md`.

@@ -12,7 +12,8 @@ Harness mounted on 2026-11-16, **awaiting the owner's acceptance**.
 - App: 0.3.0 (pairing code, encrypted stream, Spanish) is built, pushed and
   handed to the owner. It passed unit tests, lint and a release smoke test in an
   emulator (EV-001, EV-002). **Not yet checked on real devices** (BL-002).
-- Store: no Google Play developer account yet (BL-005).
+- Store: no Google Play developer account yet (BL-005). Pricing changed to
+  free listening plus a one-time hosting unlock (ADR 0008).
 - Harness: mounted; doctor run recorded in `agents/validation/DOCTOR.md`;
   mount review in `agents/reviews/20261116/`.
 - Implementation is blocked until the owner accepts the mounted harness.

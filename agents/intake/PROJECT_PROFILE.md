@@ -21,9 +21,12 @@ Broad refactors are not wanted; changes should be incremental.
   quality, lip sync and Wi-Fi robustness can only be judged by the owner on
   real hardware. Emulators here run without hardware acceleration and without
   audio output.
-- **Buyer expectations.** Netflix and similar apps cannot be shared, and both
-  devices need the app (two purchases when two Google accounts are involved).
-  Unclear messaging means refunds and bad reviews.
+- **Buyer expectations.** Netflix and similar apps cannot be shared. Unclear
+  messaging means refunds and bad reviews; the free hosting trial (ADR 0008)
+  lets people check first.
+- **The unlock must never fail a paying user.** Losing hosting because the
+  device is offline, or after a reinstall, would be the worst bug a buyer can
+  hit (ADR 0008).
 - **Security of a LAN stream.** Before 0.3.0 anyone on the network could
   listen. The pairing and encryption design (ADR 0006) must not regress.
 - **Release build breakage.** R8 shrinking broke the QR scanner library once;
@@ -61,8 +64,8 @@ Broad refactors are not wanted; changes should be incremental.
 
 ## Deployment Posture
 
-Target: Google Play, Chile first, paid at 500 CLP, as an Android App Bundle
-signed with the upload key. Blocked on the owner creating a developer account.
+Target: Google Play, Chile first, free with a one-time 500 CLP in-app unlock
+for hosting (ADR 0008), as an Android App Bundle signed with the upload key. Blocked on the owner creating a developer account.
 Until then, release APKs are delivered to the owner for sideloading.
 
 ## Collaboration Posture

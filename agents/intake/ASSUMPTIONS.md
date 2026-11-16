@@ -13,6 +13,7 @@ directly. Each is visible here so the owner can correct it.
 | ASM-006 | The record slug for the owner is `SF`, from the GitHub handle StrawberryFrappe. | Low | Owner prefers another slug |
 | ASM-007 | The default listening delay of 120 ms suits most setups, including a tablet that also plays to Bluetooth headphones. | Medium: perceived sync is the listener's main concern | Owner's real-device report (BL-002) |
 | ASM-008 | The emulator's 27 % late-audio figure for 0.3.0 comes from the emulator simulating AES instructions in software, not from the app. AES-GCM costs 1.8 µs per 5 ms packet on this build machine. | Medium | Owner's real-device "% lost" figure (BL-002) |
+| ASM-010 | Checking purchases only on the device, with no server, is acceptable: a rooted device could fake the unlock. | Low at 500 CLP | Evidence of widespread piracy |
 | ASM-009 | Google Play services is present on buyers' devices, so the QR scanner works; without it the user types the code. | Low | Reports from devices without Play services |
 
 ## Rules

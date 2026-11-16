@@ -24,12 +24,14 @@ picture, **Listen** on the device with the headphones.
   not cut out, sound that lines up with the picture, and setup that is quick.
 - **The watcher** (the person with the tablet) starts sharing and should not
   have their watching disturbed.
-- **Buyers on Google Play in Chile**: the app is to be sold for 500 CLP
-  (ADR 0004), so Spanish-speaking users and store presentation matter.
+- **People on Google Play in Chile**: the app is free to install and listen;
+  hosting is a one-time 500 CLP in-app purchase (ADR 0008). Spanish-speaking
+  users and store presentation matter.
 
 ## Success Criteria
 
-- The app is published on Google Play as a paid app at 500 CLP.
+- The app is published on Google Play, free to listen, with hosting unlocked
+  by a one-time 500 CLP purchase that keeps working offline.
 - On real devices, the listener hears the tablet's audio steadily and in sync
   with the picture, after a pairing step that takes seconds.
 - Only paired devices can hear the stream (ADR 0006).

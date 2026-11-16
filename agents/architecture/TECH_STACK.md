@@ -22,8 +22,9 @@ table.
 ## Proposed / Accepted Stack
 
 The existing stack, unchanged, pending owner confirmation (ADR 0005, ASM-001).
-Candidate additions, each needing its own decision: Opus compression (BL-013),
-Wi-Fi Direct or local-only hotspot (ADR 0007, BL-003).
+Decided addition: Google Play Billing Library for the hosting unlock
+(ADR 0008, BL-016). Candidate additions, each needing its own decision: Opus
+compression (BL-013), Wi-Fi Direct or local-only hotspot (ADR 0007, BL-003).
 
 ## Stack Decision Rules
 
@@ -34,6 +35,6 @@ Wi-Fi Direct or local-only hotspot (ADR 0007, BL-003).
 
 ## Deployment Target
 
-Google Play, as an Android App Bundle signed with the upload key; paid at
-500 CLP; Chile first (ADR 0004). Blocked until the developer account exists
+Google Play, as an Android App Bundle signed with the upload key; free with
+a one-time 500 CLP in-app unlock for hosting; Chile first (ADR 0008). Blocked until the developer account exists
 (BL-005).

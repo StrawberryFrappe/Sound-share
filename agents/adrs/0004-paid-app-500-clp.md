@@ -2,7 +2,8 @@
 
 ## Status
 
-Proposed on 2026-11-16; accepted when the owner accepts the mounted harness.
+Superseded by ADR 0008 on 2026-11-16, before it was accepted: listening became
+free and hosting a one-time in-app purchase.
 
 ## Context
 
