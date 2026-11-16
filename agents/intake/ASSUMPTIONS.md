@@ -1,0 +1,23 @@
+# Assumptions
+
+Filled in from repository evidence and earlier conversation rather than asked
+directly. Each is visible here so the owner can correct it.
+
+| ID | Assumption | Risk | Expiration / Review Trigger |
+|---|---|---|---|
+| ASM-001 | The existing stack (Kotlin, Jetpack Compose, Gradle, no backend) is accepted. | Medium: a later switch is costly | Owner accepts or rejects at harness acceptance (ADR 0005) |
+| ASM-002 | The release signing key generated on 2026-11-13 is the upload key for Google Play, and the owner keeps the copy that was sent to them. | High: a lost key blocks updates under the same listing | Confirm when enrolling in Play App Signing (BL-011) |
+| ASM-003 | Store launch is Chile first, with Spanish as the main language. | Low | Owner decides the listing (BL-007) |
+| ASM-004 | Up to eight listeners per sharing device is enough. | Low | Owner feedback or reviews |
+| ASM-005 | 72-bit pairing secrets with AES-128-GCM are strong enough for the threat model: strangers and curious people on the same Wi-Fi, not well-resourced attackers. | Medium | Any security review, or a change of audience |
+| ASM-006 | The record slug for the owner is `SF`, from the GitHub handle StrawberryFrappe. | Low | Owner prefers another slug |
+| ASM-007 | The default listening delay of 120 ms suits most setups, including a tablet that also plays to Bluetooth headphones. | Medium: perceived sync is the listener's main concern | Owner's real-device report (BL-002) |
+| ASM-008 | The emulator's 27 % late-audio figure for 0.3.0 comes from the emulator simulating AES instructions in software, not from the app. AES-GCM costs 1.8 µs per 5 ms packet on this build machine. | Medium | Owner's real-device "% lost" figure (BL-002) |
+| ASM-009 | Google Play services is present on buyers' devices, so the QR scanner works; without it the user types the code. | Low | Reports from devices without Play services |
+
+## Rules
+
+- Do not let assumptions silently become requirements.
+- High-impact assumptions need ADRs or owner confirmation.
+- If an owner correction invalidates an assumption, update affected planning,
+  architecture, validation, and traceability docs.

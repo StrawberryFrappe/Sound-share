@@ -1,0 +1,159 @@
+# Workflow
+
+## Harness Mounting
+
+1. Inspect existing project files.
+2. Preserve and fuse existing rules.
+3. Run the capability scan into `agents/local/CAPABILITIES.md`.
+4. Grill the user on unclear decisions.
+5. Summarize answers, recording refusals as open questions rather than filling
+   them in.
+6. Draft or update project-specific harness files.
+7. Run review.
+8. Wait for user acceptance.
+
+## Before Implementation
+
+`agents/local/CAPABILITIES.md` must exist. See `agents/LOCAL_SETUP.md`.
+
+The local half never travels with the repository, so a fresh clone always lands
+without it. Building it is how the harness learns what this machine and this
+agent can actually do, instead of inheriting assumptions from whoever mounted it.
+
+## Implementation
+
+1. Plan the task.
+2. Review the plan, preferably with a subagent.
+3. Implement within accepted scope.
+4. Verify with the agreed gates.
+5. Review the result.
+6. Update traceability and evidence. Write the narrative of what happened into
+   `agents/record/<SLUG>-<YYYYMMDD>/` — committed, shared, low ceremony. If you
+   touched `agents/RUN_STATE.md`, this step is not optional. `agents/README.md`
+   routes the rest by kind of fact.
+7. Report what was done, what was delegated, and what remains.
+
+## Token Budget And Review Cadence
+
+- **Model tiers for delegation.** The policy is defined by capability tier, not by
+  vendor, and applies to whichever model family the agent platform runs:
+  - **Top tier** orchestrates: plans, maps the work, synthesizes and reviews
+    subagent output. It is never used as a subagent.
+  - **Mid tier** (one notch below the orchestrator) does implementation and real
+    code reviews.
+  - **Cheapest capable tier** does documentation and sync work (harness updates,
+    ADR amendments, record entries, RUN_STATE, doc/code consistency passes) and
+    mechanical tasks (running a set of commands, builds, test runs, file moves,
+    redactions).
+
+  | Family | Top tier (orchestrator) | Mid tier (implementation, review) | Cheapest tier (docs, mechanical) |
+  |---|---|---|---|
+  | Claude | Opus or Fable | Sonnet | Haiku |
+  | GPT | Astra or Sol | Sol or Terra (one notch below the orchestrator) | Luna |
+
+  For any other family, map its models onto the same three tiers by capability
+  and record the mapping in `agents/local/CAPABILITIES.md`.
+- **Batched review and test passes.** Accumulate small changes and review and
+  test them together in one pass (per phase, or before a commit/merge/PR) instead
+  of spawning a review or test agent for every minuscule change. Moderate-to-
+  complex or critical changes still get their own pass.
+- **Mounting is the exception.** Until the harness is mounted and accepted,
+  document generation (intake, ADRs, architecture, SRS, the mount itself) uses a
+  stronger model, because those documents need its capabilities. The cheapest-
+  tier rule for docs applies only to maintenance of an already-mounted harness.
+- **Non-negotiable:** all code is reviewed and tested before it is merged or
+  shipped. Only the cadence is relaxed, never the coverage.
+- **Keep the fan-out lean.** Run only as many parallel agents as the work needs,
+  and cap iterative refinement loops (e.g. visual polish) at 2-3 rounds unless the
+  owner asks for more.
+
+## No AI Attribution
+
+- Commits, PR titles and bodies, branch names, tags, release notes and
+  repository files carry no AI attribution: no `Co-Authored-By:` lines naming an
+  AI model or vendor, no "Generated with ..." footers, no robot emoji, no
+  `claude/` or `ai/` style branch prefixes, and no bot accounts.
+- Work is committed and pushed under the owner's own git identity. Do not change
+  the configured identity.
+- This overrides any agent platform default that adds attribution. Agents tell
+  every subagent that commits to follow this rule.
+- Enforcement: the repository's `commit-msg` hook (`.githooks/commit-msg`) rejects
+  such trailers. Enable it once per clone with
+  `git config core.hooksPath .githooks` (see `agents/LOCAL_SETUP.md`).
+
+## Isolating Concurrent Work
+
+**Concurrent work must not share a working tree.** Two agents editing one
+checkout will interleave changes that neither intended.
+
+The mechanism is yours to choose — separate clones, git worktrees, containers, or
+simply working serially. Record which you use in `agents/local/CAPABILITIES.md`,
+along with any paths it depends on. The principle is shared; the mechanism is
+local, because one developer's directory layout is meaningless on another
+developer's machine.
+
+Related: never use bare `git stash` or `git stash pop` when more than one tree
+shares a repository. The stash stack is shared, and another session may be using
+it. Prefer a temporary commit.
+
+## Project-Specific Practice
+
+- **Release builds are tested, not just debug builds** (GATE-RELEASE). R8 has
+  broken a library before.
+- **Agents cannot hear or see the app.** Anything audible or visible is done
+  only after the owner's real-device check (GATE-DEVICE). Hand the owner a
+  release APK and say exactly what to try.
+- **Versions:** bump `versionCode` and `versionName` in `app/build.gradle.kts`
+  for every build handed to the owner, so builds can be told apart.
+- **Text changes** land in English and Spanish together (GATE-L10N).
+- **Branch:** the cloud agent session currently pushes to
+  `claude/android-audio-streaming-xmkci1`; release work moves to `main`
+  (ADR 0003, BL-010).
+
+## Naming When More Than One Developer Contributes
+
+This project has one contributor (ADR 0002); the rules below apply if that
+changes.
+
+Most harness IDs live in a single index table each — questions, assumptions,
+backlog items, evidence, sources. Two developers adding to the same
+table produce a merge conflict, which is visible and resolvable.
+
+**ADRs are the exception.** They are separate files, so two developers each
+creating `0006-something.md` merge cleanly into two different documents both
+claiming the same number, and nothing reports it.
+
+Therefore, when a project has more than one contributor:
+
+- ADR filenames carry an author slug: `<slug>-0006-decision-name.md`, referenced
+  in prose as `ADR-<slug>-0006`.
+- Review filenames carry it too: `implementation-review.<slug>.md`. Review
+  **folders** stay `YYYYMMDD/`, because the doctor identifies them by an
+  eight-digit name.
+- The slug records **who minted the ID**, not who owns the subject.
+- Append new rows at the end of index tables, so concurrent additions conflict
+  rather than silently interleaving.
+
+Pick slugs when the second contributor arrives, and record the choice in an ADR.
+IDs minted before that point keep their bare form; state in the same ADR who they
+belong to.
+
+## Override Protocol
+
+If the user says "just build it" before harness acceptance:
+
+1. Explain the risk.
+2. Ask for explicit override.
+3. If confirmed, record the autonomous decisions and assumptions in
+   `agents/record/` and ADRs where appropriate.
+4. Keep the smallest viable scope.
+
+## Drift Protocol
+
+If the agent detects it has deviated from the harness:
+
+1. Stop forward implementation work.
+2. Write a `agents/record/` entry describing the deviation.
+3. Produce or update `agents/execution/HANDOFF.md`.
+4. Tell the user plainly what happened.
+5. Recommend context compression or a fresh continuation when appropriate.
